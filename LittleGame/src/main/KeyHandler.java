@@ -10,7 +10,7 @@ import javax.swing.Timer;
 public class KeyHandler implements KeyListener {
 
 	private KeyHandled keyHandled;
-	private int speed = 100;
+	private int speed = 5;
 	
 	public KeyHandler(KeyHandled keyHandled) {
 		this.keyHandled = keyHandled;

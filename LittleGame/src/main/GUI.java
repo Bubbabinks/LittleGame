@@ -3,10 +3,14 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class GUI extends JPanel implements KeyHandled{
 	
@@ -27,10 +31,18 @@ public class GUI extends JPanel implements KeyHandled{
 		KeyHandler keyHandler = new KeyHandler(this);
 		frame.addKeyListener(keyHandler);
 		
+		mainTimer.start();
+		
 		player = new Player(10, 10);
 		
 		frame.setVisible(true);
 	}
+	
+	Timer mainTimer = new Timer((int)(1000d/(double)fps), new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			repaint();
+		}
+	});
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -38,7 +50,18 @@ public class GUI extends JPanel implements KeyHandled{
 	}
 	
 	public void keyEvent(int keyCode) {
-		
+		if (keyCode == KeyEvent.VK_W) {
+			player.setY(player.getY()-1);
+		}
+		if (keyCode == KeyEvent.VK_S) {
+			player.setY(player.getY()+1);
+		}
+		if (keyCode == KeyEvent.VK_D) {
+			player.setX(player.getX()+1);
+		}
+		if (keyCode == KeyEvent.VK_A) {
+			player.setX(player.getX()-1);
+		}
 	}
 	
 	public static void main(String[] args) {
