@@ -15,7 +15,7 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class GUI extends JPanel implements KeyHandled{
 	
-	private final int width = 725, height = 850, fps = 60;
+	private final int width = 725, height = 850, fps = 60, maxDistanceToEdge = 200;
 	
 	private ArrayList<Block> blocks = new ArrayList<Block>();
 	private JFrame frame = new JFrame("Little Game");
@@ -62,10 +62,10 @@ public class GUI extends JPanel implements KeyHandled{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		player.drawPlayer(g);
 		for (Block i: blocks) {
 			i.drawBlock(g);
 		}
+		player.drawPlayer(g);
 	}
 	
 	public void keyEvent(int keyCode) {
@@ -74,20 +74,33 @@ public class GUI extends JPanel implements KeyHandled{
 		}
 		if (keyCode == KeyEvent.VK_S) {
 			for (Block i: blocks) {
-				if (player.collideWith(i) == 0) {
+				if (player.collideWith(i, 2)) {
 					return;
 				}
 			}
 			player.setY(player.getY()+1);
 		}
 		if (keyCode == KeyEvent.VK_D) {
-			for (Block i: blocks) {
-				i.setX(i.getX()-1);
+			if (player.getX()+player.getWidth()<=width-maxDistanceToEdge) {
+				player.setX(player.getX()+1);
+			}else {
+				for (Block i: blocks) {
+					i.setX(i.getX()-1);
+				}
 			}
 		}
 		if (keyCode == KeyEvent.VK_A) {
 			for (Block i: blocks) {
-				i.setX(i.getX()+1);
+				if (player.collideWith(i, 3)) {
+					return;
+				}
+			}
+			if (player.getX()>maxDistanceToEdge) {
+				player.setX(player.getX()-1);
+			}else {
+				for (Block i: blocks) {
+					i.setX(i.getX()+1);
+				}
 			}
 		}
 	}
