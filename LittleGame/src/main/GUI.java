@@ -17,7 +17,7 @@ public class GUI extends JPanel implements KeyHandled{
 	
 	private final int width = 725, height = 850, fps = 60, maxDistanceToEdge = 200;
 	
-	private ArrayList<Block> blocks = new ArrayList<Block>();
+	private World world = new World(World.NORMAL_G, World.SMALL_W);
 	private JFrame frame = new JFrame("Little Game");
 	private Player player;
 	
@@ -33,19 +33,9 @@ public class GUI extends JPanel implements KeyHandled{
 		playerController.setGravity(true);
 		frame.addKeyListener(playerController);
 		
+		world.startGeneration();
+		
 		mainTimer.start();
-		
-		int blockGenerationRange = 100;
-		int blockWidth = 100;
-		double randomRange = 100;
-		int baseHeight = 150;
-		
-		for (int i=-blockGenerationRange;i<blockGenerationRange;i++) {
-			Block block = new Block(blockWidth,(int)(Math.random()*randomRange)+baseHeight);
-			block.setY(height-block.getHeight());
-			block.setX(i*blockWidth);
-			blocks.add(block);
-		}
 		
 		player = new Player(10, 10);
 		player.setX(width/2-5);
@@ -62,15 +52,19 @@ public class GUI extends JPanel implements KeyHandled{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for (Block i: blocks) {
-			i.drawBlock(g);
-		}
+		world.paintWorld(g);
 		player.drawPlayer(g);
 	}
 	
 	public void keyEvent(int keyCode) {
 		if (keyCode == KeyEvent.VK_W) {
-			player.setY(player.getY()-1);
+			if (player.getY()>maxDistanceToEdge) {
+				player.setY(player.getY()-1);
+			}else {
+				for (Block i: blocks) {
+					i.setY(i.getY()+1);
+				}
+			}
 		}
 		if (keyCode == KeyEvent.VK_S) {
 			for (Block i: blocks) {
@@ -78,9 +72,20 @@ public class GUI extends JPanel implements KeyHandled{
 					return;
 				}
 			}
-			player.setY(player.getY()+1);
+			if (player.getY()+player.getHeight()<=height-maxDistanceToEdge) {
+				player.setY(player.getY()+1);
+			}else {
+				for (Block i: blocks) {
+					i.setY(i.getY()-1);
+				}
+			}
 		}
 		if (keyCode == KeyEvent.VK_D) {
+			for (Block i: blocks) {
+				if (player.collideWith(i, 1)) {
+					return;
+				}
+			}
 			if (player.getX()+player.getWidth()<=width-maxDistanceToEdge) {
 				player.setX(player.getX()+1);
 			}else {

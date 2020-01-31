@@ -11,7 +11,8 @@ public class Block implements GameObject {
 	public Block(int width, int height) {
 		this.width = width;
 		this.height = height;
-		color = new Color((int)(Math.random()*255d),(int)(Math.random()*255d),(int)(Math.random()*255d));
+		int random = (int)(Math.random()*200d);
+		color = new Color(random, random, random);
 	}
 	
 	public void drawBlock(Graphics g) {

@@ -18,16 +18,19 @@ public class Player {
 		g.fillRect(x, y, width, height);
 	}
 	
-	//x+width<gameObject.getWidth()+gameObject.getX()+1 && x>gameObject.getX()-1
-	
 	public boolean collideWith(GameObject gameObject, int check) {
 		if (check==2 && gameObject.getX()+gameObject.getWidth()>x && x+width>gameObject.getX()) {
 			if (gameObject.getY() <= y+height) {
 				return true;
 			}
 		}
-		if (check==3 && gameObject.getY()+gameObject.getHeight()<y && y+height<gameObject.getY()) {
-			if (gameObject.getX()+gameObject.getWidth() >= x && gameObject.getX()>x) {
+		if (check==3 && gameObject.getY()+gameObject.getHeight()>y && y+height>gameObject.getY()) {
+			if (gameObject.getX()+gameObject.getWidth() >= x && gameObject.getX()<x+width) {
+				return true;
+			}
+		}
+		if (check==1 && gameObject.getY()+gameObject.getHeight()>y && y+height>gameObject.getY()) {
+			if (gameObject.getX()<=x+width && gameObject.getX()+gameObject.getWidth()>x) {
 				return true;
 			}
 		}
