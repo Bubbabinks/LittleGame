@@ -25,7 +25,6 @@ public class WorldGenerator {
 	
 	public void startGeneration() {
 		if (generationType == NORMAL_G) {
-			System.out.println("World Generation Started");
 			int blockHeight = 0;
 			for (int x=-worldSize/2;x<worldSize/2;x++) {
 				for (int y=0;y<100-blockHeight;y++) {
@@ -49,7 +48,6 @@ public class WorldGenerator {
 					blockHeight++;
 				}
 			}
-			System.out.println("World Generation Ended");
 		}
 	}
 	
