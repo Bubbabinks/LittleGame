@@ -16,10 +16,10 @@ import javax.swing.Timer;
 public class GUI extends JPanel implements KeyHandled{
 	
 	private final int width = 725, height = 850, fps = 60, maxDistanceToEdge = 200;
-	
-	private World world = new World(World.NORMAL_G, World.SMALL_W);
 	private JFrame frame = new JFrame("Little Game");
 	private Player player;
+	
+	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
 	public GUI() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,8 +33,11 @@ public class GUI extends JPanel implements KeyHandled{
 		playerController.setGravity(true);
 		frame.addKeyListener(playerController);
 		
-		world.startGeneration();
-		
+		WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.MEDIUM_W);
+		worldGenerator.startGeneration();
+		for (GameObject gameObject: worldGenerator.getWorld()) {
+			world.add(gameObject);
+		}
 		mainTimer.start();
 		
 		player = new Player(10, 10);
@@ -52,8 +55,10 @@ public class GUI extends JPanel implements KeyHandled{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		world.paintWorld(g);
-		player.drawPlayer(g);
+		for (GameObject object: world) {
+			object.drawObject(g);
+		}
+		player.drawObject(g);
 	}
 	
 	public void keyEvent(int keyCode) {
@@ -61,13 +66,13 @@ public class GUI extends JPanel implements KeyHandled{
 			if (player.getY()>maxDistanceToEdge) {
 				player.setY(player.getY()-1);
 			}else {
-				for (Block i: blocks) {
+				for (GameObject i: world) {
 					i.setY(i.getY()+1);
 				}
 			}
 		}
 		if (keyCode == KeyEvent.VK_S) {
-			for (Block i: blocks) {
+			for (GameObject i: world) {
 				if (player.collideWith(i, 2)) {
 					return;
 				}
@@ -75,13 +80,13 @@ public class GUI extends JPanel implements KeyHandled{
 			if (player.getY()+player.getHeight()<=height-maxDistanceToEdge) {
 				player.setY(player.getY()+1);
 			}else {
-				for (Block i: blocks) {
+				for (GameObject i: world) {
 					i.setY(i.getY()-1);
 				}
 			}
 		}
 		if (keyCode == KeyEvent.VK_D) {
-			for (Block i: blocks) {
+			for (GameObject i: world) {
 				if (player.collideWith(i, 1)) {
 					return;
 				}
@@ -89,13 +94,13 @@ public class GUI extends JPanel implements KeyHandled{
 			if (player.getX()+player.getWidth()<=width-maxDistanceToEdge) {
 				player.setX(player.getX()+1);
 			}else {
-				for (Block i: blocks) {
+				for (GameObject i: world) {
 					i.setX(i.getX()-1);
 				}
 			}
 		}
 		if (keyCode == KeyEvent.VK_A) {
-			for (Block i: blocks) {
+			for (GameObject i: world) {
 				if (player.collideWith(i, 3)) {
 					return;
 				}
@@ -103,7 +108,7 @@ public class GUI extends JPanel implements KeyHandled{
 			if (player.getX()>maxDistanceToEdge) {
 				player.setX(player.getX()-1);
 			}else {
-				for (Block i: blocks) {
+				for (GameObject i: world) {
 					i.setX(i.getX()+1);
 				}
 			}

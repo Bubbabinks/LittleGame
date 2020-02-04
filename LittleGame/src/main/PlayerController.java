@@ -12,7 +12,7 @@ public class PlayerController implements KeyListener {
 
 	private HashSet<Integer> keysPressed;
 	private KeyHandled keyHandled;
-	private int speed = 5;
+	private int speed = 2;
 	private boolean gravity = false;
 	
 	public PlayerController(KeyHandled keyHandled) {
@@ -70,10 +70,6 @@ public class PlayerController implements KeyListener {
 	
 	public void setGravity(boolean active) {
 		gravity = active;
-	}
-	
-	public void setSpeed(int speed) {
-		this.speed = speed;
 	}
 	
 }

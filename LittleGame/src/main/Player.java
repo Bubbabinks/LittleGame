@@ -3,7 +3,7 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Player {
+public class Player implements GameObject{
 
 	private int x = 0, y = 0;
 	private int width, height;
@@ -13,7 +13,7 @@ public class Player {
 		this.height = height;
 	}
 	
-	public void drawPlayer(Graphics g) {
+	public void drawObject(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(x, y, width, height);
 	}
@@ -55,5 +55,11 @@ public class Player {
 	}
 	public void setY(int y) {
 		this.y = y;
+	}
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	public void setHeight(int height) {
+		this.height = height;
 	}
 }

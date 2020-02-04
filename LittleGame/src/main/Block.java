@@ -11,11 +11,14 @@ public class Block implements GameObject {
 	public Block(int width, int height) {
 		this.width = width;
 		this.height = height;
-		int random = (int)(Math.random()*200d);
-		color = new Color(random, random, random);
+		//Black And White Random Color
+		//int random = (int)(Math.random()*200d);
+		//color = new Color(random, random, random);
+		//All Color Random Color
+		color = new Color((int)(Math.random()*200d), (int)(Math.random()*200d), (int)(Math.random()*200d));
 	}
 	
-	public void drawBlock(Graphics g) {
+	public void drawObject(Graphics g) {
 		g.setColor(color);
 		g.fillRect(x, y, width, height);
 	}
