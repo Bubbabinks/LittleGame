@@ -27,20 +27,21 @@ public class GUI extends JPanel implements KeyHandled{
 		frame.setLayout(new BorderLayout());
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
+		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		
-		PlayerController playerController = new PlayerController(this);
-		playerController.setGravity(true);
-		frame.addKeyListener(playerController);
-		
-		WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.MEDIUM_W);
+		WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.SMALL_W);
 		worldGenerator.startGeneration();
 		for (GameObject gameObject: worldGenerator.getWorld()) {
 			world.add(gameObject);
 		}
+		PlayerController playerController = new PlayerController(this);
+		playerController.setGravity(true);
+		frame.addKeyListener(playerController);
+		
 		mainTimer.start();
 		
-		player = new Player(10, 10);
+		player = new Player(40, 40);
 		player.setX(width/2-5);
 		player.setY(height/2+5);
 		
@@ -55,8 +56,14 @@ public class GUI extends JPanel implements KeyHandled{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		int halfWidth = width/2;
+		int doubleWidth = width*2;
+		int halfHeight = height/2;
+		int doubleHeight = height*2;
 		for (GameObject object: world) {
-			object.drawObject(g);
+			if (Math.abs(object.getX()+(halfWidth))<doubleWidth && Math.abs(object.getY()+(halfHeight))<doubleHeight) {
+				object.drawObject(g);
+			}
 		}
 		player.drawObject(g);
 	}

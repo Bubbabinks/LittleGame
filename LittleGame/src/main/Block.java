@@ -18,9 +18,19 @@ public class Block implements GameObject {
 		color = new Color((int)(Math.random()*200d), (int)(Math.random()*200d), (int)(Math.random()*200d));
 	}
 	
+	public Block(int width, int height, Color color) {
+		this.width = width;
+		this.height = height;
+		this.color = color;
+	}
+	
 	public void drawObject(Graphics g) {
 		g.setColor(color);
 		g.fillRect(x, y, width, height);
+	}
+	
+	public Color getColor() {
+		return color;
 	}
 	
 	public int getWidth() {
@@ -37,6 +47,10 @@ public class Block implements GameObject {
 	
 	public int getY() {
 		return y;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	public void setWidth(int width) {
