@@ -6,9 +6,12 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -22,7 +25,13 @@ public class GUI extends JPanel implements KeyHandled{
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
 	public GUI() {
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				super.windowClosing(e);
+				closeGame();
+			}
+		});
 		this.setPreferredSize(new Dimension(width,height));
 		frame.setLayout(new BorderLayout());
 		frame.add(this, BorderLayout.CENTER);
@@ -30,7 +39,7 @@ public class GUI extends JPanel implements KeyHandled{
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		
-		WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.SMALL_W);
+		WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, 20);
 		worldGenerator.startGeneration();
 		for (GameObject gameObject: worldGenerator.getWorld()) {
 			world.add(gameObject);
@@ -70,6 +79,11 @@ public class GUI extends JPanel implements KeyHandled{
 	
 	public void keyEvent(int keyCode) {
 		if (keyCode == KeyEvent.VK_W) {
+			for (GameObject i: world) {
+				if (player.collideWith(i, 0)) {
+					return;
+				}
+			}
 			if (player.getY()>maxDistanceToEdge) {
 				player.setY(player.getY()-1);
 			}else {
@@ -77,6 +91,7 @@ public class GUI extends JPanel implements KeyHandled{
 					i.setY(i.getY()+1);
 				}
 			}
+			return;
 		}
 		if (keyCode == KeyEvent.VK_S) {
 			for (GameObject i: world) {
@@ -91,6 +106,7 @@ public class GUI extends JPanel implements KeyHandled{
 					i.setY(i.getY()-1);
 				}
 			}
+			return;
 		}
 		if (keyCode == KeyEvent.VK_D) {
 			for (GameObject i: world) {
@@ -105,6 +121,7 @@ public class GUI extends JPanel implements KeyHandled{
 					i.setX(i.getX()-1);
 				}
 			}
+			return;
 		}
 		if (keyCode == KeyEvent.VK_A) {
 			for (GameObject i: world) {
@@ -119,6 +136,17 @@ public class GUI extends JPanel implements KeyHandled{
 					i.setX(i.getX()+1);
 				}
 			}
+			return;
+		}
+		if (keyCode == KeyEvent.VK_ESCAPE) {
+			closeGame();
+		}
+	}
+	
+	public void closeGame() {
+		int exit = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?", "Exiting?", JOptionPane.YES_NO_OPTION);
+		if (exit == 0) {
+			System.exit(0);
 		}
 	}
 	

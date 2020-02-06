@@ -36,32 +36,10 @@ public class PlayerController implements KeyListener {
 	
 	public void keyTyped(KeyEvent e) {}
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_W) {
-			keysPressed.add(KeyEvent.VK_W);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_S) {
-			keysPressed.add(KeyEvent.VK_S);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_D) {
-			keysPressed.add(KeyEvent.VK_D);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			keysPressed.add(KeyEvent.VK_A);
-		}
+		keysPressed.add(e.getKeyCode());
 	}
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_W) {
-			keysPressed.remove(KeyEvent.VK_W);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_S) {
-			keysPressed.remove(KeyEvent.VK_S);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_D) {
-			keysPressed.remove(KeyEvent.VK_D);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			keysPressed.remove(KeyEvent.VK_A);
-		}
+		keysPressed.remove(e.getKeyCode());
 	}
 
 	public int getSpeed() {

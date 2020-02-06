@@ -20,7 +20,7 @@ public class Player implements GameObject{
 	
 	public boolean collideWith(GameObject gameObject, int check) {
 		if (check==2 && gameObject.getX()+gameObject.getWidth()>x && x+width>gameObject.getX()) {
-			if (gameObject.getY() <= y+height) {
+			if (gameObject.getY() <= y+height && y<gameObject.getY()+gameObject.getHeight()) {
 				return true;
 			}
 		}
@@ -31,6 +31,11 @@ public class Player implements GameObject{
 		}
 		if (check==1 && gameObject.getY()+gameObject.getHeight()>y && y+height>gameObject.getY()) {
 			if (gameObject.getX()<=x+width && gameObject.getX()+gameObject.getWidth()>x) {
+				return true;
+			}
+		}
+		if (check==0 && gameObject.getX()+gameObject.getWidth()>x && x+width>gameObject.getX()) {
+			if (gameObject.getY()+gameObject.getWidth() >= y && y+height>gameObject.getY()) {
 				return true;
 			}
 		}
