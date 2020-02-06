@@ -50,4 +50,12 @@ public class PlayerController implements KeyListener {
 		gravity = active;
 	}
 	
+	public HashSet<Integer> getKeysPressed() {
+		return keysPressed;
+	}
+	
+	public void setKeysPressed(HashSet<Integer> keysPressed) {
+		this.keysPressed = keysPressed;
+	}
+	
 }
