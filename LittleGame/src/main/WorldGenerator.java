@@ -33,7 +33,7 @@ public class WorldGenerator {
 				for (int y=0;y<100-blockHeight;y++) {
 					Block block = new Block(blockSize, blockSize);
 					block.setX(x*blockSize);
-					block.setY(750+(blockSize*(y+blockHeight)));
+					block.setY(blockSize*15+(blockSize*(y+blockHeight)));
 					if (y == 0) {
 						block.setColor(new Color(126,255,51));
 					}else if (y < 4) {
@@ -78,8 +78,8 @@ public class WorldGenerator {
 		return gameObjects;
 	}
 	
-	public void paintWorld(Graphics g) {
-		
+	public int getBlockSize() {
+		return this.blockSize;
 	}
 	
 }

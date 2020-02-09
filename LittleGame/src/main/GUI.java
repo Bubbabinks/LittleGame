@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -22,13 +24,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-public class GUI extends JPanel implements KeyHandled{
+public class GUI extends JPanel implements KeyHandled, MouseListener{
 	
 	private static final long serialVersionUID = 1L;
 	private final int width = 725, height = 850, fps = 60, maxDistanceToEdge = 200;
 	private JFrame frame = new JFrame("Little Game");
 	private PlayerController playerController;
 	private Player player;
+	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.SMALL_W);
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
@@ -44,23 +47,25 @@ public class GUI extends JPanel implements KeyHandled{
 		frame.setLayout(new BorderLayout());
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		
-		WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.FLAT_G, WorldGenerator.EXTRA_SMALL_W);
 		worldGenerator.startGeneration();
 		for (GameObject gameObject: worldGenerator.getWorld()) {
 			world.add(gameObject);
 		}
+		
+		mainTimer.start();
+		
 		playerController = new PlayerController(this);
 		playerController.setGravity(true);
 		frame.addKeyListener(playerController);
 		
-		mainTimer.start();
+		addMouseListener(this);
 		
-		player = new Player(40, 40);
-		player.setX(width/2-5);
-		player.setY(height/2+5);
+		player = new Player(worldGenerator.getBlockSize(), worldGenerator.getBlockSize());
+		player.setX(width/2-(player.getWidth()/2));
+		player.setY(worldGenerator.getBlockSize()*4);
 		
 		frame.setVisible(true);
 	}
@@ -212,4 +217,42 @@ public class GUI extends JPanel implements KeyHandled{
 	public static void main(String[] args) {
 		new GUI();
 	}
+
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			ArrayList<GameObject> removeable = new ArrayList<GameObject>();
+			for (int i=0;i<world.size();i++) {
+				if (world.get(i).getX()<e.getX() &&
+						world.get(i).getX()+world.get(i).getWidth()>e.getX() &&
+						world.get(i).getY()<e.getY() &&
+						world.get(i).getY()+world.get(i).getHeight()>e.getY()) {
+					removeable.add(world.get(i));
+				}
+			}
+			for (GameObject gameObject: removeable) {
+				world.remove(gameObject);
+			}
+		}else if (e.getButton() == MouseEvent.BUTTON3) {
+			int intialX = e.getX()-world.get(0).getX()%worldGenerator.getBlockSize();
+			int intialY = e.getY()-world.get(0).getY()%worldGenerator.getBlockSize();
+			int x = world.get(0).getX()%worldGenerator.getBlockSize()+(intialX-(intialX%worldGenerator.getBlockSize()));
+			int y = world.get(0).getY()%worldGenerator.getBlockSize()+(intialY-(intialY%worldGenerator.getBlockSize()));
+			for (int i=0;i<world.size();i++) {
+				if (world.get(i).getX()<e.getX() &&
+						world.get(i).getX()+world.get(i).getWidth()>e.getX() &&
+						world.get(i).getY()<e.getY() &&
+						world.get(i).getY()+world.get(i).getHeight()>e.getY()) {
+					return;
+				}
+			}
+			Block block = new Block(worldGenerator.getBlockSize(), worldGenerator.getBlockSize());
+			block.setX(x);
+			block.setY(y);
+			world.add(block);
+		}
+	}
+	public void mouseReleased(MouseEvent e) {}
 }
