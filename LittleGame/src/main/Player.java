@@ -8,13 +8,15 @@ public class Player implements GameObject{
 	private int x = 0, y = 0;
 	private int width, height;
 	
+	private Color color = Color.BLACK;
+	
 	public Player(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}
 	
 	public void drawObject(Graphics g) {
-		g.setColor(Color.BLACK);
+		g.setColor(color);
 		g.fillRect(x, y, width, height);
 	}
 	
@@ -66,5 +68,12 @@ public class Player implements GameObject{
 	}
 	public void setHeight(int height) {
 		this.height = height;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
 	}
 }

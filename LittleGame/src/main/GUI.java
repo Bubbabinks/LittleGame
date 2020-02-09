@@ -1,17 +1,18 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -19,18 +20,19 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-public class GUI extends JPanel implements KeyHandled, MouseListener{
+public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheelListener{
 	
 	private static final long serialVersionUID = 1L;
 	private final int width = 725, height = 850, fps = 60, maxDistanceToEdge = 200;
 	private JFrame frame = new JFrame("Little Game");
 	private PlayerController playerController;
 	private Player player;
+	private Inventory inventory = new Inventory(width, height);
+	
 	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.SMALL_W);
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
@@ -62,10 +64,19 @@ public class GUI extends JPanel implements KeyHandled, MouseListener{
 		frame.addKeyListener(playerController);
 		
 		addMouseListener(this);
+		addMouseWheelListener(this);
 		
 		player = new Player(worldGenerator.getBlockSize(), worldGenerator.getBlockSize());
 		player.setX(width/2-(player.getWidth()/2));
 		player.setY(worldGenerator.getBlockSize()*4);
+		
+		Color[] slots = inventory.getSlots();
+		for (int i=0;i<slots.length;i++) {
+			slots[i] = Color.BLACK;
+		}
+		slots[0] = new Color(126,255,51);
+		slots[1] = new Color(181,143,76);
+		slots[2] = new Color(130,130,130);
 		
 		frame.setVisible(true);
 	}
@@ -88,6 +99,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener{
 			}
 		}
 		player.drawObject(g);
+		inventory.drawObject(g);
 	}
 	
 	public void keyEvent(int keyCode) {
@@ -171,6 +183,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener{
 		
 		public CloseWindow() {
 			setTitle("Exiting?");
+			setResizable(false);
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
@@ -248,11 +261,21 @@ public class GUI extends JPanel implements KeyHandled, MouseListener{
 					return;
 				}
 			}
-			Block block = new Block(worldGenerator.getBlockSize(), worldGenerator.getBlockSize());
+			if (inventory.getSlots()[inventory.getSelectedSlot()-1].equals(Color.BLACK)) {
+				return;
+			}
+			Block block = new Block(worldGenerator.getBlockSize(), worldGenerator.getBlockSize(), inventory.getSlots()[inventory.getSelectedSlot()-1]);
 			block.setX(x);
 			block.setY(y);
 			world.add(block);
 		}
 	}
 	public void mouseReleased(MouseEvent e) {}
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		if (e.getWheelRotation() > 0) {
+			inventory.setSelectedSlot(inventory.getSelectedSlot()+1);
+		}else if (e.getWheelRotation() < 0) {
+			inventory.setSelectedSlot(inventory.getSelectedSlot()-1);
+		}
+	}
 }

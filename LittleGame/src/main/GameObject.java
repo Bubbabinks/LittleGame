@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public interface GameObject {
@@ -13,6 +14,9 @@ public interface GameObject {
 	public int getHeight();
 	public void setWidth(int width);
 	public void setHeight(int height);
+	
+	public Color getColor();
+	public void setColor(Color color);
 	
 	public void drawObject(Graphics g);
 	
