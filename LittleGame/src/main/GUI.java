@@ -27,13 +27,14 @@ import javax.swing.Timer;
 public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheelListener{
 	
 	private static final long serialVersionUID = 1L;
-	private final int width = 725, height = 850, fps = 60, maxDistanceToEdge = 200;
+	//Game built on original width of 725 and height of 850
+	private final int width = 975, height = 850, fps = 60, maxDistanceToEdge = 200;
 	private JFrame frame = new JFrame("Little Game");
 	private PlayerController playerController;
 	private Player player;
 	private Inventory inventory = new Inventory(width, height);
 	
-	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.SMALL_W);
+	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.LARGE_W);
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
@@ -74,9 +75,6 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		for (int i=0;i<slots.length;i++) {
 			slots[i] = Color.BLACK;
 		}
-		slots[0] = new Color(126,255,51);
-		slots[1] = new Color(181,143,76);
-		slots[2] = new Color(130,130,130);
 		
 		frame.setVisible(true);
 	}
@@ -246,7 +244,36 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 				}
 			}
 			for (GameObject gameObject: removeable) {
-				world.remove(gameObject);
+				Color[] slots = inventory.getSlots();
+				int[] slotAmounts = inventory.getSlotAmounts();
+				boolean needNewSlot = true;
+				boolean dontBreak = false;
+				for (int i=0;i<slots.length;i++) {
+					if (slots[i].equals(gameObject.getColor()) && slotAmounts[i] != 0 && slotAmounts[i] < 999) {
+						slotAmounts[i] = slotAmounts[i]+1;
+						needNewSlot = false;
+						break;
+					}
+					if (i==slots.length-1 && slotAmounts[i] != 0) {
+						dontBreak = true;
+						needNewSlot = false;
+					}
+				}
+				if (needNewSlot) {
+					int i;
+					for (i=0;i<slotAmounts.length-1;i++) {
+						if (slotAmounts[i] == 0) {
+							break;
+						}
+					}
+					slots[i] = gameObject.getColor();
+					slotAmounts[i] = slotAmounts[i]+1;
+				}
+				inventory.setSlots(slots);
+				inventory.setSlotAmounts(slotAmounts);
+				if (!dontBreak) {
+					world.remove(gameObject);
+				}
 			}
 		}else if (e.getButton() == MouseEvent.BUTTON3) {
 			int intialX = e.getX()-world.get(0).getX()%worldGenerator.getBlockSize();
@@ -261,9 +288,12 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 					return;
 				}
 			}
-			if (inventory.getSlots()[inventory.getSelectedSlot()-1].equals(Color.BLACK)) {
+			if (inventory.getSlotAmounts()[inventory.getSelectedSlot()-1] == 0) {
 				return;
 			}
+			int[] slotAmounts = inventory.getSlotAmounts();
+			slotAmounts[inventory.getSelectedSlot()-1] = slotAmounts[inventory.getSelectedSlot()-1]-1;
+			inventory.setSlotAmounts(slotAmounts);
 			Block block = new Block(worldGenerator.getBlockSize(), worldGenerator.getBlockSize(), inventory.getSlots()[inventory.getSelectedSlot()-1]);
 			block.setX(x);
 			block.setY(y);

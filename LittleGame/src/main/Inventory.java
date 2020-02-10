@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Inventory {
 	
-	private Color block = new Color(126,255,51);
+	private int[] slotAmounts;
 	private Color[] slots;
 	private int width, height;
 	private int selectedSlot = 1;
@@ -16,18 +16,19 @@ public class Inventory {
 		this.height = height;
 		maxSlot = ((width-100)/90);
 		slots = new Color[maxSlot];
-	}
-	
-	public Color getBlock() {
-		return block;
-	}
-	
-	public void setBlock(Color block) {
-		this.block = block;
+		slotAmounts = new int[maxSlot];
 	}
 	
 	public int getSelectedSlot() {
 		return selectedSlot;
+	}
+	
+	public int[] getSlotAmounts() {
+		return slotAmounts;
+	}
+	
+	public void setSlotAmounts(int[] slotAmounts) {
+		this.slotAmounts = slotAmounts;
 	}
 	
 	public Color[] getSlots() {
@@ -60,9 +61,11 @@ public class Inventory {
 			g.fillRect(70+(((width-100)%90)/((width-100)/90))/2+(90*i)+(((width-100)%90)*i/((width-100)/90)), 20, 50, 50);
 		}
 		for (int i=0;i<maxSlot;i++) {
-			if (!slots[i].equals(Color.BLACK)) {
+			if (slotAmounts[i]!=0) {
 				g.setColor(slots[i]);
 				g.fillRect(80+(((width-100)%90)/((width-100)/90))/2+(90*i)+(((width-100)%90)*i/((width-100)/90)), 30, 30, 30);
+				g.setColor(Color.BLACK);
+				g.drawString(slotAmounts[i]+"", 82+(((width-100)%90)/((width-100)/90))/2+(90*i)+(((width-100)%90)*i/((width-100)/90)), 40);
 			}
 		}
 	}

@@ -28,6 +28,7 @@ public class WorldGenerator {
 	public void startGeneration() {
 		if (generationType == NORMAL_G) {
 			int blockHeight = 0;
+			int previousChange = 0;
 			for (int x=-worldSize/2;x<worldSize/2;x++) {
 				for (int y=0;y<100-blockHeight;y++) {
 					Block block = new Block(blockSize, blockSize);
@@ -43,11 +44,14 @@ public class WorldGenerator {
 					world.add(block);
 				}
 				int random = (int)(Math.random()*3d);
-				if (random == 0 && blockHeight-1>=-maxRandomValue) {
+				if (random == 0 && blockHeight-1>=-maxRandomValue && previousChange <= 0) {
+					previousChange = -1;
 					blockHeight--;
-				}
-				if (random == 2 && blockHeight+1<=maxRandomValue) {
+				}else if (random == 2 && blockHeight+1<=maxRandomValue && previousChange >= 0) {
+					previousChange = 1;
 					blockHeight++;
+				}else {
+					previousChange = 0;
 				}
 			}
 		}else if (generationType == FLAT_G) {
