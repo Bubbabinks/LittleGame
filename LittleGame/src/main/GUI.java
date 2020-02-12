@@ -1,11 +1,8 @@
 package main;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,45 +10,32 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheelListener{
 	
 	private static final long serialVersionUID = 1L;
 	//Game built on original width of 725 and height of 850
-	private final int width = 975, height = 850, fps = 60, maxDistanceToEdge = 200;
-	private JFrame frame = new JFrame("Little Game");
+	private final int width, height, fps = 60, maxDistanceToEdge = 200;
+	private JFrame frame;
 	private PlayerController playerController;
 	private Player player;
-	private Inventory inventory = new Inventory(width, height);
+	private Inventory inventory;
+	private Color skybox = new Color(10,10,255);
 	
-	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.LARGE_W);
+	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.FLAT_G, WorldGenerator.MEDIUM_W);
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
-	public GUI() {
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-				closeGame();
-			}
-		});
+	public GUI(JFrame frame, int width, int height) {
+		this.frame = frame;
+		this.width = width;
+		this.height = height;
 		this.setPreferredSize(new Dimension(width,height));
-		frame.setLayout(new BorderLayout());
-		frame.add(this, BorderLayout.CENTER);
-		frame.pack();
-		frame.setResizable(true);
-		frame.setLocationRelativeTo(null);
 		
 		worldGenerator.startGeneration();
 		for (GameObject gameObject: worldGenerator.getWorld()) {
@@ -62,7 +46,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		
 		playerController = new PlayerController(this);
 		playerController.setGravity(true);
-		frame.addKeyListener(playerController);
+		this.frame.addKeyListener(playerController);
 		
 		addMouseListener(this);
 		addMouseWheelListener(this);
@@ -71,12 +55,12 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		player.setX(width/2-(player.getWidth()/2));
 		player.setY(worldGenerator.getBlockSize()*4);
 		
+		inventory = new Inventory(width, height);
+		
 		Color[] slots = inventory.getSlots();
 		for (int i=0;i<slots.length;i++) {
 			slots[i] = Color.BLACK;
 		}
-		
-		frame.setVisible(true);
 	}
 	
 	Timer mainTimer = new Timer((int)(1000d/(double)fps), new ActionListener() {
@@ -161,72 +145,6 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 			}
 			return;
 		}
-		if (keyCode == KeyEvent.VK_ESCAPE) {
-			closeGame();
-		}
-	}
-	
-	private CloseWindow closeWindow = new CloseWindow();
-	
-	public void closeGame() {
-		if (!closeWindow.isVisible()) {
-			closeWindow.setVisible(true);
-			playerController.getKeysPressed().remove(KeyEvent.VK_ESCAPE);
-		}
-	}
-	
-	public class CloseWindow extends JFrame {
-		
-		private static final long serialVersionUID = 1L;
-		
-		public CloseWindow() {
-			setTitle("Exiting?");
-			setResizable(false);
-			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					super.windowClosing(e);
-					setVisible(false);
-				}
-			});
-			setLayout(new GridBagLayout());
-			GridBagConstraints GC = new GridBagConstraints();
-			JLabel text = new JLabel("Are you sure you want to Exit?");
-			text.setHorizontalAlignment(SwingConstants.CENTER);
-			text.setPreferredSize(new Dimension(260,50));
-			GC.gridwidth = 2;
-			add(text, GC);
-			
-			GC = new GridBagConstraints();
-			JButton yes = new JButton("Yes");
-			yes.setPreferredSize(new Dimension(130,50));
-			yes.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					System.exit(0);
-				}
-			});
-			GC.gridy = 1;
-			add(yes, GC);
-			
-			GC = new GridBagConstraints();
-			JButton no = new JButton("No");
-			no.setPreferredSize(new Dimension(130,50));
-			no.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					setVisible(false);
-				}
-			});
-			GC.gridy = 1;
-			GC.gridx = 1;
-			add(no, GC);
-			
-			pack();
-			setLocationRelativeTo(frame);
-		}
-	}
-	
-	public static void main(String[] args) {
-		new GUI();
 	}
 
 	public void mouseClicked(MouseEvent e) {}
