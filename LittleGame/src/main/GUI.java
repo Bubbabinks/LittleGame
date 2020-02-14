@@ -19,23 +19,23 @@ import javax.swing.Timer;
 public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheelListener{
 	
 	private static final long serialVersionUID = 1L;
-	//Game built on original width of 725 and height of 850
 	private final int width, height, fps = 60, maxDistanceToEdge = 200;
 	private JFrame frame;
 	private PlayerController playerController;
 	private Player player;
 	private Inventory inventory;
 	private Color skybox = new Color(135, 206, 235);
-	
-	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.SMALL_W);
+	private WorldGenerator worldGenerator;
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
-	public GUI(JFrame frame, int width, int height) {
+	public GUI(JFrame frame, int width, int height, int worldGeneratorType, int worldSize) {
 		this.frame = frame;
 		this.width = width;
 		this.height = height;
 		this.setPreferredSize(new Dimension(width,height));
+		
+		worldGenerator = new WorldGenerator(worldGeneratorType, worldSize);
 		
 		worldGenerator.startGeneration();
 		for (GameObject gameObject: worldGenerator.getWorld()) {

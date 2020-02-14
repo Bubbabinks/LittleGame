@@ -18,6 +18,8 @@ public class UIManager extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private final int width = 975, height = 850;
+	private GUI gui;
+	private MUI mui;
 	
 	public UIManager() {
 		setTitle("Little Game");
@@ -30,8 +32,14 @@ public class UIManager extends JFrame {
 		});
 		setLayout(new BorderLayout());
 		
-		MUI mui = new MUI(this, width, height);
+		mui = new MUI(this, width, height);
 		add(mui, BorderLayout.CENTER);
+		mui.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[] i = e.getActionCommand().split(",");
+				startGame(i[0],i[1]);
+			}
+		});
 		
 		pack();
 		setResizable(true);
@@ -43,6 +51,14 @@ public class UIManager extends JFrame {
 		if (!closeWindow.isVisible()) {
 			closeWindow.setVisible(true);
 		}
+	}
+	
+	private void startGame(String worldGeneratorType, String worldSize) {
+		remove(mui);
+		repaint();
+		
+		gui = new GUI(this, width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize));
+		add(gui,BorderLayout.CENTER);
 	}
 	
 	private CloseWindow closeWindow = new CloseWindow();

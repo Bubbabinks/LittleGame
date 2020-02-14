@@ -8,10 +8,14 @@ public class WorldGenerator {
 	public static final int NORMAL_G = 0;
 	public static final int FLAT_G = 1;
 	
-	public static final int EXTRA_SMALL_W = 20;
+	public static final int EXTRA_SMALL_W = 25;
 	public static final int SMALL_W = 100;
 	public static final int MEDIUM_W = 500;
 	public static final int LARGE_W = 1000;
+	
+	public static final String[] GENERATION_TYPES = {"NORMAL_G", "FLAT_G"};
+	public static final String[] WORLDSIZE_TYPES = {"EXTRA_SMALL_W", "SMALL_W", "MEDIUM_W", "LARGE_W"};
+	public static final int[] WORLDSIZE_VALUES = {EXTRA_SMALL_W, SMALL_W, MEDIUM_W, LARGE_W};
 	
 	private int blockSize = 40;
 	private int maxRandomValue = 5;
@@ -23,6 +27,24 @@ public class WorldGenerator {
 	public WorldGenerator(int generationType, int worldSize) {
 		this.generationType = generationType;
 		this.worldSize = worldSize;
+	}
+	
+	public static int worldGenerationTypeConverter(String GenerationType) {
+		for (int i=0;i<GENERATION_TYPES.length;i++) {
+			if (GenerationType.equalsIgnoreCase(GENERATION_TYPES[i])) {
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	public static int worldSizeConverter(String worldSize) {
+		for (int i=0;i<WORLDSIZE_TYPES.length;i++) {
+			if (worldSize.equalsIgnoreCase(WORLDSIZE_TYPES[i])) {
+				return WORLDSIZE_VALUES[i];
+			}
+		}
+		return WORLDSIZE_VALUES[1];
 	}
 	
 	public void startGeneration() {

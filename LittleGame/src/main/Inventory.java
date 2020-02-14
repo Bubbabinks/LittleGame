@@ -5,8 +5,6 @@ import java.awt.Graphics;
 
 public class Inventory {
 	
-	//Removed Height
-	
 	private int[] slotAmounts;
 	private Color[] slots;
 	private int width;
