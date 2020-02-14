@@ -5,15 +5,16 @@ import java.awt.Graphics;
 
 public class Inventory {
 	
+	//Removed Height
+	
 	private int[] slotAmounts;
 	private Color[] slots;
-	private int width, height;
+	private int width;
 	private int selectedSlot = 1;
 	private int maxSlot;
 	
-	public Inventory(int width, int height) {
+	public Inventory(int width) {
 		this.width = width;
-		this.height = height;
 		maxSlot = ((width-100)/90);
 		slots = new Color[maxSlot];
 		slotAmounts = new int[maxSlot];

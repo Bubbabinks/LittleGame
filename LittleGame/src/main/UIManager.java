@@ -30,8 +30,8 @@ public class UIManager extends JFrame {
 		});
 		setLayout(new BorderLayout());
 		
-		GUI gui = new GUI(this, width, height);
-		add(gui, BorderLayout.CENTER);
+		MUI mui = new MUI(this, width, height);
+		add(mui, BorderLayout.CENTER);
 		
 		pack();
 		setResizable(true);

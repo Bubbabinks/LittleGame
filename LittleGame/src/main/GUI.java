@@ -25,9 +25,9 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	private PlayerController playerController;
 	private Player player;
 	private Inventory inventory;
-	private Color skybox = new Color(10,10,255);
+	private Color skybox = new Color(135, 206, 235);
 	
-	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.FLAT_G, WorldGenerator.MEDIUM_W);
+	private WorldGenerator worldGenerator = new WorldGenerator(WorldGenerator.NORMAL_G, WorldGenerator.SMALL_W);
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
@@ -55,7 +55,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		player.setX(width/2-(player.getWidth()/2));
 		player.setY(worldGenerator.getBlockSize()*4);
 		
-		inventory = new Inventory(width, height);
+		inventory = new Inventory(width);
 		
 		Color[] slots = inventory.getSlots();
 		for (int i=0;i<slots.length;i++) {
@@ -75,6 +75,8 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		int doubleWidth = width*2;
 		int halfHeight = height/2;
 		int doubleHeight = height*2;
+		g.setColor(skybox);
+		g.fillRect(0, 0, width, height);
 		for (GameObject object: world) {
 			if (Math.abs(object.getX()+(halfWidth))<doubleWidth && Math.abs(object.getY()+(halfHeight))<doubleHeight) {
 				object.drawObject(g);
