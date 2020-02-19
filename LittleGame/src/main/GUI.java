@@ -46,7 +46,6 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		
 		playerController = new PlayerController(this);
 		playerController.setGravity(true);
-		this.frame.addKeyListener(playerController);
 		
 		addMouseListener(this);
 		addMouseWheelListener(this);
@@ -61,6 +60,8 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		for (int i=0;i<slots.length;i++) {
 			slots[i] = Color.BLACK;
 		}
+		
+		addKeyListener(playerController);
 	}
 	
 	Timer mainTimer = new Timer((int)(1000d/(double)fps), new ActionListener() {

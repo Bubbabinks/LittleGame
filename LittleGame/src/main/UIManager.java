@@ -59,6 +59,11 @@ public class UIManager extends JFrame {
 		
 		gui = new GUI(this, width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize));
 		add(gui,BorderLayout.CENTER);
+		
+		revalidate();
+		pack();
+		
+		gui.requestFocus();
 	}
 	
 	private CloseWindow closeWindow = new CloseWindow();
