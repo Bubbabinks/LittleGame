@@ -27,7 +27,6 @@ public class PlayerController implements KeyListener {
 		public void actionPerformed(ActionEvent e) {
 			if (gravity) {
 				if (!keysPressed.contains(KeyEvent.VK_W) && player.getJump()<=0) {
-					System.out.println("hello");
 					keyHandled.keyEvent(KeyEvent.VK_S);
 				}else if (player.getJump() <= 0) {
 					keyHandled.keyEvent(KeyEvent.VK_S);

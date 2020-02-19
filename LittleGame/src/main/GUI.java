@@ -177,10 +177,16 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 						needNewSlot = false;
 						break;
 					}
-					if (i==slots.length-1 && slotAmounts[i] != 0) {
-						dontBreak = true;
-						needNewSlot = false;
+				}
+				int ITS = 0;
+				for (int i=0;i<slots.length;i++) {
+					if (slotAmounts[i] == 0) {
+						ITS++;
 					}
+				}
+				if (ITS == 0) {
+					dontBreak = true;
+					needNewSlot = false;
 				}
 				if (needNewSlot) {
 					int i;

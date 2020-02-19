@@ -42,6 +42,7 @@ public class Player implements GameObject{
 		}
 		if (check==0 && gameObject.getX()+gameObject.getWidth()>x && x+width>gameObject.getX()) {
 			if (gameObject.getY()+gameObject.getWidth() >= y && y+height>gameObject.getY()) {
+				jump = 0;
 				return true;
 			}
 		}
