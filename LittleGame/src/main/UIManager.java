@@ -57,7 +57,7 @@ public class UIManager extends JFrame {
 		remove(mui);
 		repaint();
 		
-		gui = new GUI(this, width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize));
+		gui = new GUI(width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize));
 		add(gui,BorderLayout.CENTER);
 		
 		revalidate();

@@ -8,6 +8,9 @@ public class Player implements GameObject{
 	private int x = 0, y = 0;
 	private int width, height;
 	
+	private int maxJumpHeight = 100;
+	private int jump = 0;
+	
 	private Color color = Color.BLACK;
 	
 	public Player(int width, int height) {
@@ -23,6 +26,7 @@ public class Player implements GameObject{
 	public boolean collideWith(GameObject gameObject, int check) {
 		if (check==2 && gameObject.getX()+gameObject.getWidth()>x && x+width>gameObject.getX()) {
 			if (gameObject.getY() <= y+height && y<gameObject.getY()+gameObject.getHeight()) {
+				jump = -1;
 				return true;
 			}
 		}
@@ -42,6 +46,18 @@ public class Player implements GameObject{
 			}
 		}
 		return false;
+	}
+	
+	public void setJump(int jump) {
+		this.jump = jump;
+	}
+	
+	public int getJump() {
+		return jump;
+	}
+	
+	public int getMaxJumpHeight() {
+		return maxJumpHeight;
 	}
 	
 	public int getX() {

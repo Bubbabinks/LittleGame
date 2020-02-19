@@ -7,13 +7,14 @@ public class WorldGenerator {
 
 	public static final int NORMAL_G = 0;
 	public static final int FLAT_G = 1;
+	public static final int RANDOM_G = 2;
 	
 	public static final int EXTRA_SMALL_W = 25;
 	public static final int SMALL_W = 100;
 	public static final int MEDIUM_W = 500;
 	public static final int LARGE_W = 1000;
 	
-	public static final String[] GENERATION_TYPES = {"NORMAL_G", "FLAT_G"};
+	public static final String[] GENERATION_TYPES = {"NORMAL_G", "FLAT_G", "RANDOM_G"};
 	public static final String[] WORLDSIZE_TYPES = {"EXTRA_SMALL_W", "SMALL_W", "MEDIUM_W", "LARGE_W"};
 	public static final int[] WORLDSIZE_VALUES = {EXTRA_SMALL_W, SMALL_W, MEDIUM_W, LARGE_W};
 	
@@ -90,6 +91,17 @@ public class WorldGenerator {
 						block.setColor(new Color(130,130,130));
 					}
 					world.add(block);
+				}
+			}
+		}else if (generationType == RANDOM_G) {
+			for (int x=-worldSize/2;x<worldSize/2;x++) {
+				for (int y=-50;y<50;y++) {
+					if (Math.random() > 0.5) {
+						Block block = new Block(blockSize, blockSize);
+						block.setX(x*blockSize);
+						block.setY(750+(blockSize*(y)));
+						world.add(block);
+					}
 				}
 			}
 		}

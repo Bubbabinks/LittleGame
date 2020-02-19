@@ -46,8 +46,7 @@ public class MUI extends JPanel {
 		title.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
 		add(title, GC);
 		
-		JButton playButton = new JButton("Play");
-		playButton.setPreferredSize(new Dimension(300,50));
+		Button playButton = new Button(300, 50, "Play");
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				endMenu("normal_g","small_w");

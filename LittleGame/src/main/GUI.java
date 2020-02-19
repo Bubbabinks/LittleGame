@@ -20,7 +20,6 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	
 	private static final long serialVersionUID = 1L;
 	private final int width, height, fps = 60, maxDistanceToEdge = 200;
-	private JFrame frame;
 	private PlayerController playerController;
 	private Player player;
 	private Inventory inventory;
@@ -29,8 +28,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
-	public GUI(JFrame frame, int width, int height, int worldGeneratorType, int worldSize) {
-		this.frame = frame;
+	public GUI(int width, int height, int worldGeneratorType, int worldSize) {
 		this.width = width;
 		this.height = height;
 		this.setPreferredSize(new Dimension(width,height));
@@ -44,15 +42,15 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		
 		mainTimer.start();
 		
-		playerController = new PlayerController(this);
-		playerController.setGravity(true);
-		
 		addMouseListener(this);
 		addMouseWheelListener(this);
 		
 		player = new Player(worldGenerator.getBlockSize(), worldGenerator.getBlockSize());
 		player.setX(width/2-(player.getWidth()/2));
 		player.setY(worldGenerator.getBlockSize()*4);
+		
+		playerController = new PlayerController(this, player);
+		playerController.setGravity(true);
 		
 		inventory = new Inventory(width);
 		
@@ -101,6 +99,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 					i.setY(i.getY()+1);
 				}
 			}
+			player.setJump(player.getJump()-1);
 			return;
 		}
 		if (keyCode == KeyEvent.VK_S) {
@@ -147,6 +146,9 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 				}
 			}
 			return;
+		}
+		if (keyCode >= 49 && keyCode <= 57) {
+			inventory.setSelectedSlot(keyCode-48);
 		}
 	}
 
