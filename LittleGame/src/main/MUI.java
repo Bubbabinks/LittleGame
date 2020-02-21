@@ -49,7 +49,7 @@ public class MUI extends JPanel {
 		Button playButton = new Button(300, 50, "Play");
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				endMenu("normal_g","small_w");
+				endMenu("flat_g","small_w");
 			}
 		});
 		GC = new GridBagConstraints();
@@ -58,6 +58,7 @@ public class MUI extends JPanel {
 		GC.gridy = 1;
 		GC.insets = new Insets(10,0,10,0);
 		add(playButton, GC);
+		
 	}
 	
 	private void endMenu(String worldGeneratorType, String worldSize) {
