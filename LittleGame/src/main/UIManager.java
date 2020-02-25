@@ -37,7 +37,11 @@ public class UIManager extends JFrame {
 		mui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String[] i = e.getActionCommand().split(",");
-				startGame(i[0],i[1]);
+				if (i.length == 2) {
+					startGame(i[0],i[1]);
+				}else {
+					startGame(i[0],i[1],i[2]);
+				}
 			}
 		});
 		
@@ -57,7 +61,20 @@ public class UIManager extends JFrame {
 		remove(mui);
 		repaint();
 		
-		gui = new GUI(width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize));
+		gui = new GUI(width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize), "0");
+		add(gui,BorderLayout.CENTER);
+		
+		revalidate();
+		pack();
+		
+		gui.requestFocus();
+	}
+	
+	private void startGame(String worldGeneratorType, String worldSize, String needsPlayer) {
+		remove(mui);
+		repaint();
+		
+		gui = new GUI(width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize), needsPlayer);
 		add(gui,BorderLayout.CENTER);
 		
 		revalidate();

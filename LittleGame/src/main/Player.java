@@ -7,6 +7,7 @@ public class Player implements GameObject{
 
 	private int x = 0, y = 0;
 	private int width, height;
+	private int globalX = 0, globalY = 0;
 	
 	private int maxJumpHeight = 100;
 	private int jump = 0;
@@ -29,6 +30,7 @@ public class Player implements GameObject{
 				jump = -1;
 				return true;
 			}
+			jump = 0;
 		}
 		if (check==3 && gameObject.getY()+gameObject.getHeight()>y && y+height>gameObject.getY()) {
 			if (gameObject.getX()+gameObject.getWidth() >= x && gameObject.getX()<x+width) {
@@ -47,6 +49,22 @@ public class Player implements GameObject{
 			}
 		}
 		return false;
+	}
+	
+	public void setGlobalX(int x) {
+		this.globalX = x;
+	}
+	
+	public void setGlobalY(int y) {
+		this.globalY = y;
+	}
+	
+	public int getGlobalX() {
+		return globalX;
+	}
+	
+	public int getGlobalY() {
+		return globalY;
 	}
 	
 	public void setJump(int jump) {

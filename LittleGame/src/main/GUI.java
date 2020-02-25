@@ -28,16 +28,17 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	
 	private ArrayList<GameObject> world = new ArrayList<GameObject>();
 	
-	public GUI(int width, int height, int worldGeneratorType, int worldSize) {
+	public GUI(int width, int height, int worldGeneratorType, int worldSize, String needsPlayer) {
 		this.width = width;
 		this.height = height;
 		this.setPreferredSize(new Dimension(width,height));
 		
-		worldGenerator = new WorldGenerator(worldGeneratorType, worldSize);
+		worldGenerator = new WorldGenerator(worldGeneratorType, worldSize, world);
 		
-		worldGenerator.startGeneration();
-		for (GameObject gameObject: worldGenerator.getWorld()) {
-			world.add(gameObject);
+		if (needsPlayer.equals("0")) {
+			worldGenerator.startGeneration();
+		}else {
+			worldGenerator.startGeneration(player);
 		}
 		
 		mainTimer.start();
