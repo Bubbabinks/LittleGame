@@ -30,6 +30,8 @@ public class Player implements GameObject{
 				jump = -1;
 				return true;
 			}
+		}
+		if (check == 2 && jump == -1) {
 			jump = 0;
 		}
 		if (check==3 && gameObject.getY()+gameObject.getHeight()>y && y+height>gameObject.getY()) {
