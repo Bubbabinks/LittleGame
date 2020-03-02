@@ -12,7 +12,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -23,22 +22,23 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	private PlayerController playerController;
 	private Player player;
 	private Inventory inventory;
-	private Color skybox = new Color(135, 206, 235);
 	private WorldGenerator worldGenerator;
 	
-	private ArrayList<GameObject> world = new ArrayList<GameObject>();
+	private ArrayList<GameObject> world = World.getWorld();
 	
 	public GUI(int width, int height, int worldGeneratorType, int worldSize, String needsPlayer) {
 		this.width = width;
 		this.height = height;
 		this.setPreferredSize(new Dimension(width,height));
 		
-		worldGenerator = new WorldGenerator(worldGeneratorType, worldSize, world);
+		worldGenerator = new WorldGenerator(worldGeneratorType, worldSize);
 		
-		if (needsPlayer.equals("0")) {
-			worldGenerator.startGeneration();
-		}else {
-			worldGenerator.startGeneration(player);
+		if (World.getNewWorld()) {
+			if (needsPlayer.equals("0")) {
+				worldGenerator.startGeneration();
+			}else {
+				worldGenerator.startGeneration(player);
+			}
 		}
 		
 		mainTimer.start();
@@ -53,12 +53,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		playerController = new PlayerController(this, player);
 		playerController.setGravity(true);
 		
-		inventory = new Inventory(width);
-		
-		Color[] slots = inventory.getSlots();
-		for (int i=0;i<slots.length;i++) {
-			slots[i] = Color.BLACK;
-		}
+		inventory = World.inventory;
 		
 		addKeyListener(playerController);
 	}
@@ -75,7 +70,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		int doubleWidth = width*2;
 		int halfHeight = height/2;
 		int doubleHeight = height*2;
-		g.setColor(skybox);
+		g.setColor(World.SKY);
 		g.fillRect(0, 0, width, height);
 		for (GameObject object: world) {
 			if (Math.abs(object.getX()+(halfWidth))<doubleWidth && Math.abs(object.getY()+(halfHeight))<doubleHeight) {
@@ -99,6 +94,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 				for (GameObject i: world) {
 					i.setY(i.getY()+1);
 				}
+				World.setGlobalShiftY(World.getGlobalShiftY()-1);
 			}
 			player.setJump(player.getJump()-1);
 			return;
@@ -115,6 +111,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 				for (GameObject i: world) {
 					i.setY(i.getY()-1);
 				}
+				World.setGlobalShiftY(World.getGlobalShiftY()+1);
 			}
 			return;
 		}
@@ -130,6 +127,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 				for (GameObject i: world) {
 					i.setX(i.getX()-1);
 				}
+				World.setGlobalShiftX(World.getGlobalShiftX()+1);
 			}
 			return;
 		}
@@ -145,6 +143,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 				for (GameObject i: world) {
 					i.setX(i.getX()+1);
 				}
+				World.setGlobalShiftX(World.getGlobalShiftX()-1);
 			}
 			return;
 		}
@@ -226,7 +225,9 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 			inventory.setSlotAmounts(slotAmounts);
 			Block block = new Block(worldGenerator.getBlockSize(), worldGenerator.getBlockSize(), inventory.getSlots()[inventory.getSelectedSlot()-1]);
 			block.setX(x);
+			block.setGlobalX(x+World.getGlobalShiftX());
 			block.setY(y);
+			block.setGlobalY(y+World.getGlobalShiftY());
 			world.add(block);
 		}
 	}

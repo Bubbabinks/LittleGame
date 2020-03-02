@@ -12,7 +12,9 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRootPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class UIManager extends JFrame {
 
@@ -52,6 +54,9 @@ public class UIManager extends JFrame {
 	}
 	
 	public void closeGame() {
+		if (gui != null) {
+			FileManager.worldSave();
+		}
 		if (!closeWindow.isVisible()) {
 			closeWindow.setVisible(true);
 		}
@@ -115,6 +120,8 @@ public class UIManager extends JFrame {
 					System.exit(0);
 				}
 			});
+			JRootPane rootPane = SwingUtilities.getRootPane(this); 
+			rootPane.setDefaultButton(yes);
 			GC.gridy = 1;
 			add(yes, GC);
 			

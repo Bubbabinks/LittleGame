@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Block implements GameObject {
 	
-	private int width, height, x = 0, y = 0;
+	private int width, height, x = 0, y = 0, globalX=0, globalY=0;
 	private Color color;
 	
 	public Block(int width, int height) {
@@ -67,6 +67,22 @@ public class Block implements GameObject {
 	
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public int getGlobalX() {
+		return globalX;
+	}
+
+	public int getGlobalY() {
+		return globalY;
+	}
+
+	public void setGlobalX(int x) {
+		this.globalX = x;
+	}
+
+	public void setGlobalY(int y) {
+		this.globalY = y;
 	}
 	
 }

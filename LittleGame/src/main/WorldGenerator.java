@@ -23,19 +23,18 @@ public class WorldGenerator {
 	public static final String[] WORLDSIZE_TYPES = {"EXTRA_SMALL_W", "SMALL_W", "MEDIUM_W", "LARGE_W"};
 	public static final int[] WORLDSIZE_VALUES = {EXTRA_SMALL_W, SMALL_W, MEDIUM_W, LARGE_W};
 	
-	private int blockSize = 40;
+	public static final int blockSize = 40;
 	private int maxRandomValue = 5;
-	private ArrayList<GameObject> world;
+	private ArrayList<GameObject> world = World.getWorld();
 	
 	private int generationType;
 	private int worldSize;
 	
 	private Player player;
 	
-	public WorldGenerator(int generationType, int worldSize, ArrayList<GameObject> world) {
+	public WorldGenerator(int generationType, int worldSize) {
 		this.generationType = generationType;
 		this.worldSize = worldSize;
-		this.world = world;
 	}
 	
 	public static int worldGenerationTypeConverter(String GenerationType) {
@@ -64,13 +63,15 @@ public class WorldGenerator {
 				for (int y=0;y<100-blockHeight;y++) {
 					Block block = new Block(blockSize, blockSize);
 					block.setX(x*blockSize);
+					block.setGlobalX(x*blockSize);
 					block.setY(blockSize*15+(blockSize*(y+blockHeight)));
+					block.setGlobalY(blockSize*15+(blockSize*(y+blockHeight)));
 					if (y == 0) {
-						block.setColor(new Color(126,255,51));
+						block.setColor(World.GRASS);
 					}else if (y < 4) {
-						block.setColor(new Color(181,143,76));
+						block.setColor(World.DIRT);
 					}else {
-						block.setColor(new Color(130,130,130));
+						block.setColor(World.STONE);
 					}
 					world.add(block);
 				}
@@ -90,13 +91,15 @@ public class WorldGenerator {
 				for (int y=0;y<100;y++) {
 					Block block = new Block(blockSize, blockSize);
 					block.setX(x*blockSize);
+					block.setGlobalX(x*blockSize);
 					block.setY(750+(blockSize*(y)));
+					block.setGlobalY(750+(blockSize*(y)));
 					if (y == 0) {
-						block.setColor(new Color(126,255,51));
+						block.setColor(World.GRASS);
 					}else if (y < 4) {
-						block.setColor(new Color(181,143,76));
+						block.setColor(World.DIRT);
 					}else {
-						block.setColor(new Color(130,130,130));
+						block.setColor(World.STONE);
 					}
 					world.add(block);
 				}
@@ -107,7 +110,9 @@ public class WorldGenerator {
 					if (Math.random() > 0.5) {
 						Block block = new Block(blockSize, blockSize);
 						block.setX(x*blockSize);
+						block.setGlobalX(x*blockSize);
 						block.setY(750+(blockSize*(y)));
+						block.setGlobalY(750+(blockSize*(y)));
 						world.add(block);
 					}
 				}
@@ -129,7 +134,9 @@ public class WorldGenerator {
 		for (int x=-worldSize/2;x<worldSize/2;x++) {
 			for (int y=0;y<100-blockHeight;y++) {
 				Block block = new Block(blockSize, blockSize);
+				block.setGlobalX(x*blockSize);
 				block.setX(x*blockSize);
+				block.setGlobalY(blockSize*15+(blockSize*(y+blockHeight)));
 				block.setY(blockSize*15+(blockSize*(y+blockHeight)));
 				if (y == 0) {
 					block.setColor(new Color(126,255,51));

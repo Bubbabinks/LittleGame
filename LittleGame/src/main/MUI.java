@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,19 +19,28 @@ import javax.swing.SwingConstants;
 public class MUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private final int width, height;
 	private Color BackgroundColor = new Color(135, 206, 235);
 	private JComboBox<String> generationComboBox = new JComboBox<String>(WorldGenerator.GENERATION_TYPES);
 	private JComboBox<String> worldSizeComboBox = new JComboBox<String>(WorldGenerator.WORLDSIZE_TYPES);
 	
+	private Button singleButton;
+	private Button multiButton;
+	private Button createButton;
+	private Button loadButton;
+	
 	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
 	
 	public MUI(JFrame frame, int width, int height) {
-		this.width = width;
-		this.height = height;
 		setPreferredSize(new Dimension(width, height));
 		setBackground(BackgroundColor);
 		setLayout(new GridBagLayout());
+		
+		World.setInventory(new Inventory(width));
+		
+		Color[] slots = World.inventory.getSlots();
+		for (int i=0;i<slots.length;i++) {
+			slots[i] = Color.BLACK;
+		}
 		
 		JLabel title = new JLabel("Little Game");
 		title.setPreferredSize(new Dimension(500,200));
@@ -49,70 +57,124 @@ public class MUI extends JPanel {
 		title.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
 		add(title, GC);
 		
-		Button playButton = new Button(300, 50, "Play");
-		playButton.addActionListener(new ActionListener() {
+		World.setNewWorld(true);
+		
+		singleButton = new Button(300, 50, "Singleplayer");
+		singleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				remove(title);
-				remove(playButton);
+				remove(singleButton);
+				remove(multiButton);
 				repaint();
 				
-				JLabel generationLabel = new JLabel("Generation Type: ");
+				GridBagConstraints GC = new GridBagConstraints();
+				GC.insets = new Insets(10, 0, 10, 0);
+				createButton = new Button(300,50,"Create New World");
+				createButton.setBackground(new Color(181,143,76));
+				createButton.setForeground(Color.WHITE);
+				createButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						remove(createButton);
+						remove(loadButton);
+						repaint();
+						JLabel generationLabel = new JLabel("Generation Type: ");
+						generationLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						GridBagConstraints GC = new GridBagConstraints();
+						add(generationLabel, GC);
+						
+						GC = new GridBagConstraints();
+						GC.gridx = 1;
+						add(generationComboBox, GC);
+						
+						JLabel worldSizeLabel = new JLabel("World Size: ");
+						worldSizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						GC = new GridBagConstraints();
+						GC.gridy = 1;
+						add(worldSizeLabel, GC);
+						
+						worldSizeComboBox.setSelectedIndex(1);
+						GC = new GridBagConstraints();
+						GC.gridx = 1;
+						GC.gridy = 1;
+						add(worldSizeComboBox, GC);
+						
+						Button button = new Button(200, 30, "Generate World");
+						button.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								if (generationComboBox.getSelectedItem().equals("INFINITE_G")) {
+									endMenu((String)generationComboBox.getSelectedItem(), (String)worldSizeComboBox.getSelectedItem(), 1);
+								}else {
+									endMenu((String)generationComboBox.getSelectedItem(), (String)worldSizeComboBox.getSelectedItem());
+								}
+							}
+						});
+						GC.gridy = 2;
+						GC.gridx = 0;
+						GC.gridwidth = 2;
+						GC.insets = new Insets(10, 0, 0, 0);
+						add(button, GC);
+						revalidate();
+					}
+				});
+				add(createButton,GC);
+				
+				GC = new GridBagConstraints();
+				GC.gridy = 1;
+				loadButton = new Button(300,50,"Load World");
+				loadButton.setBackground(new Color(181,143,76));
+				loadButton.setForeground(Color.WHITE);
+				loadButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						World.setNewWorld(false);
+						FileManager.worldLoad();
+						endMenu("normal_g", "small_w");
+					}
+					
+				});
+				add(loadButton,GC);
+				
+				revalidate();
+			}
+		});
+		
+		GC = new GridBagConstraints();
+		singleButton.setBackground(new Color(181,143,76));
+		singleButton.setForeground(Color.WHITE);
+		GC.gridy = 1;
+		GC.insets = new Insets(10,0,10,0);
+		add(singleButton, GC);
+		
+		multiButton = new Button(300, 50, "Multiplayer");
+		multiButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				remove(title);
+				remove(multiButton);
+				remove(singleButton);
+				repaint();
+				
+				JLabel generationLabel = new JLabel("COMING SOON");
 				generationLabel.setHorizontalAlignment(SwingConstants.CENTER);
 				GridBagConstraints GC = new GridBagConstraints();
 				add(generationLabel, GC);
-				
-				GC = new GridBagConstraints();
-				GC.gridx = 1;
-				add(generationComboBox, GC);
-				
-				JLabel worldSizeLabel = new JLabel("World Size: ");
-				worldSizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-				GC = new GridBagConstraints();
-				GC.gridy = 1;
-				add(worldSizeLabel, GC);
-				
-				worldSizeComboBox.setSelectedIndex(1);
-				GC = new GridBagConstraints();
-				GC.gridx = 1;
-				GC.gridy = 1;
-				add(worldSizeComboBox, GC);
-				
-				Button button = new Button(200, 30, "Generate World");
-				button.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						if (generationComboBox.getSelectedItem().equals("INFINITE_G")) {
-							endMenu((String)generationComboBox.getSelectedItem(), (String)worldSizeComboBox.getSelectedItem(), 1);
-						}else {
-							endMenu((String)generationComboBox.getSelectedItem(), (String)worldSizeComboBox.getSelectedItem());
-						}
-					}
-				});
-				GC.gridy = 2;
-				GC.gridx = 0;
-				GC.gridwidth = 2;
-				GC.insets = new Insets(10, 0, 0, 0);
-				add(button, GC);
 				
 				revalidate();
 			}
 		});
 		GC = new GridBagConstraints();
-		playButton.setBackground(new Color(181,143,76));
-		playButton.setForeground(Color.WHITE);
-		GC.gridy = 1;
+		multiButton.setBackground(new Color(181,143,76));
+		multiButton.setForeground(Color.WHITE);
+		GC.gridy = 2;
 		GC.insets = new Insets(10,0,10,0);
-		add(playButton, GC);
+		add(multiButton, GC);
 		
 	}
 	
-	@SuppressWarnings("unused")
 	private void endMenu(String worldGeneratorType, String worldSize) {
 		for (ActionListener actionListener: actionListeners) {
 			actionListener.actionPerformed(new ActionEvent(this, 0, worldGeneratorType+","+worldSize));
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private void endMenu(String worldGeneratorType, String worldSize, int needsPlayer) {
 		for (ActionListener actionListener: actionListeners) {
 			actionListener.actionPerformed(new ActionEvent(this, 0, worldGeneratorType+","+worldSize+","+needsPlayer));
