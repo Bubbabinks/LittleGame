@@ -19,7 +19,7 @@ public class WorldGenerator {
 	public static final int MEDIUM_W = 500;
 	public static final int LARGE_W = 1000;
 	
-	public static final String[] GENERATION_TYPES = {"NORMAL_G", "FLAT_G", "RANDOM_G", "INFINITE_G"};
+	public static final String[] GENERATION_TYPES = {"NORMAL_G", "FLAT_G", "RANDOM_G"};
 	public static final String[] WORLDSIZE_TYPES = {"EXTRA_SMALL_W", "SMALL_W", "MEDIUM_W", "LARGE_W"};
 	public static final int[] WORLDSIZE_VALUES = {EXTRA_SMALL_W, SMALL_W, MEDIUM_W, LARGE_W};
 	

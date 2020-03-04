@@ -14,6 +14,7 @@ public class PlayerController implements KeyListener {
 	private Player player;
 	private KeyHandled keyHandled;
 	private int speed = 3;
+	private final int gravityStrength = 2;
 	private boolean gravity = false;
 	
 	public PlayerController(KeyHandled keyHandled, Player player) {
@@ -27,9 +28,9 @@ public class PlayerController implements KeyListener {
 		public void actionPerformed(ActionEvent e) {
 			if (gravity) {
 				if (!keysPressed.contains(KeyEvent.VK_W) && player.getJump()<=0) {
-					keyHandled.keyEvent(KeyEvent.VK_S);
+					doGravity();
 				}else if (player.getJump() <= 0) {
-					keyHandled.keyEvent(KeyEvent.VK_S);
+					doGravity();
 				}
 			}
 			for (int i: keysPressed) {
@@ -47,6 +48,12 @@ public class PlayerController implements KeyListener {
 			}
 		}
 	});
+	
+	private void doGravity() {
+		for (int i=0;i<gravityStrength;i++) {
+			keyHandled.keyEvent(KeyEvent.VK_S);
+		}
+	}
 	
 	public void keyTyped(KeyEvent e) {}
 	public void keyPressed(KeyEvent e) {

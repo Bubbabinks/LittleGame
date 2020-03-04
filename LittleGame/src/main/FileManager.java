@@ -26,7 +26,25 @@ public class FileManager {
 		if (val != JFileChooser.APPROVE_OPTION) {
 			return;
 		}
-		File file = fileChooser.getSelectedFile();
+		readWorld(fileChooser.getSelectedFile().getPath());
+	}
+	
+	public static void worldSave() {
+		ArrayList<GameObject> world = World.getWorld();
+		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
+		fileChooser.setDialogTitle("Save");
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("World File .world", "world");
+		fileChooser.addChoosableFileFilter(filter);
+		int val = fileChooser.showSaveDialog(null);
+		if (val != JFileChooser.APPROVE_OPTION) {
+			return;
+		}
+		writeWorld(fileChooser.getSelectedFile().getPath());
+	}
+	
+	private static void readWorld(String path) {
+		File file = new File(path);
 		if (!file.exists()) {
 			return;
 		}
@@ -73,22 +91,10 @@ public class FileManager {
 		}catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
-	public static void worldSave() {
-		ArrayList<GameObject> world = World.getWorld();
-		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
-		fileChooser.setDialogTitle("Save");
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("World File .world", "world");
-		fileChooser.addChoosableFileFilter(filter);
-		int val = fileChooser.showSaveDialog(null);
-		if (val != JFileChooser.APPROVE_OPTION) {
-			return;
-		}
-		File file = fileChooser.getSelectedFile();
+	private static void writeWorld(String path) {
+		File file = new File(path);
 		if (file.exists()) {
 			file.delete();
 		}else {

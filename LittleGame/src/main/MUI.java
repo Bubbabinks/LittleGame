@@ -3,6 +3,7 @@ package main;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,28 +15,32 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 public class MUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Color BackgroundColor = new Color(135, 206, 235);
 	private JComboBox<String> generationComboBox = new JComboBox<String>(WorldGenerator.GENERATION_TYPES);
 	private JComboBox<String> worldSizeComboBox = new JComboBox<String>(WorldGenerator.WORLDSIZE_TYPES);
+	
+	private int width, height;
 	
 	private Button singleButton;
 	private Button multiButton;
 	private Button createButton;
 	private Button loadButton;
 	
+	private boolean drawGrassBlock = false;
+	
 	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
 	
 	public MUI(JFrame frame, int width, int height) {
+		this.width = width;
+		this.height = height;
 		setPreferredSize(new Dimension(width, height));
-		setBackground(BackgroundColor);
+		setBackground(World.SKY);
 		setLayout(new GridBagLayout());
-		
-		World.setInventory(new Inventory(width));
 		
 		Color[] slots = World.inventory.getSlots();
 		for (int i=0;i<slots.length;i++) {
@@ -51,7 +56,7 @@ public class MUI extends JPanel {
 		int stringWidth = title.getFontMetrics(labelFont).stringWidth(labelText);
 		int componentWidth = 500;
 		double widthRatio = (double)componentWidth / (double)stringWidth;
-		int newFontSize = (int)(labelFont.getSize() * widthRatio);
+		int newFontSize = (int)(labelFont.getSize() * widthRatio)-5;
 		int componentHeight = 200;
 		int fontSizeToUse = Math.min(newFontSize, componentHeight);
 		title.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
@@ -67,8 +72,15 @@ public class MUI extends JPanel {
 				remove(multiButton);
 				repaint();
 				
+				JPanel worldPanel = new JPanel();
+				JScrollPane worldScollPane = new JScrollPane(worldPanel);
+				
 				GridBagConstraints GC = new GridBagConstraints();
-				GC.insets = new Insets(10, 0, 10, 0);
+				GC.insets = new Insets(75, 20, 10, 20);
+				GC.gridy=1;
+				GC.gridx=1;
+				drawGrassBlock = true;
+				repaint();
 				createButton = new Button(300,50,"Create New World");
 				createButton.setBackground(new Color(181,143,76));
 				createButton.setForeground(Color.WHITE);
@@ -120,6 +132,7 @@ public class MUI extends JPanel {
 				
 				GC = new GridBagConstraints();
 				GC.gridy = 1;
+				GC.insets = new Insets(75, 20, 10, 20);
 				loadButton = new Button(300,50,"Load World");
 				loadButton.setBackground(new Color(181,143,76));
 				loadButton.setForeground(Color.WHITE);
@@ -167,6 +180,15 @@ public class MUI extends JPanel {
 		GC.insets = new Insets(10,0,10,0);
 		add(multiButton, GC);
 		
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (drawGrassBlock) {
+			g.setColor(World.GRASS);
+			g.fillRect(0, height-200, width, height);
+			System.out.println("hello");
+		}
 	}
 	
 	private void endMenu(String worldGeneratorType, String worldSize) {

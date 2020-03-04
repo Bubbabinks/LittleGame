@@ -34,6 +34,8 @@ public class UIManager extends JFrame {
 		});
 		setLayout(new BorderLayout());
 		
+		World.setInventory(new Inventory(width));
+		
 		mui = new MUI(this, width, height);
 		add(mui, BorderLayout.CENTER);
 		mui.addActionListener(new ActionListener() {
