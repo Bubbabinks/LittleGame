@@ -16,6 +16,7 @@ public class PlayerController implements KeyListener {
 	private int speed = 3;
 	private final int gravityStrength = 2;
 	private boolean gravity = false;
+	private AudioManager audioManager = new AudioManager();
 	
 	public PlayerController(KeyHandled keyHandled, Player player) {
 		this.player = player;
@@ -37,7 +38,13 @@ public class PlayerController implements KeyListener {
 				if (i != KeyEvent.VK_W) {
 					keyHandled.keyEvent(i);	
 				}else {
+					for (GameObject gameObject: World.getWorld()) {
+						if (player.collideWith(gameObject, 0) ) {
+							player.setJump(0);
+						}
+					}
 					if (player.getJump() == -1) {
+						audioManager.jump();
 						player.setJump(player.getMaxJumpHeight());
 						keyHandled.keyEvent(KeyEvent.VK_W);
 					}

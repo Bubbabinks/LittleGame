@@ -22,8 +22,10 @@ public class UIManager extends JFrame {
 	private final int width = 975, height = 850;
 	private GUI gui;
 	private MUI mui;
+	private AudioManager audioManager = new AudioManager();
 	
 	public UIManager() {
+		audioManager.startBackgroundMusic();
 		setTitle("Little Game");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {

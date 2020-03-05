@@ -23,6 +23,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	private Player player;
 	private Inventory inventory;
 	private WorldGenerator worldGenerator;
+	private AudioManager audioManager = new AudioManager();
 	
 	private ArrayList<GameObject> world = World.getWorld();
 	
@@ -167,6 +168,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 				}
 			}
 			for (GameObject gameObject: removeable) {
+				audioManager.blockBreak();
 				Color[] slots = inventory.getSlots();
 				int[] slotAmounts = inventory.getSlotAmounts();
 				boolean needNewSlot = true;

@@ -31,8 +31,6 @@ public class MUI extends JPanel {
 	private Button createButton;
 	private Button loadButton;
 	
-	private boolean drawGrassBlock = false;
-	
 	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
 	
 	public MUI(JFrame frame, int width, int height) {
@@ -79,7 +77,6 @@ public class MUI extends JPanel {
 				GC.insets = new Insets(75, 20, 10, 20);
 				GC.gridy=1;
 				GC.gridx=1;
-				drawGrassBlock = true;
 				repaint();
 				createButton = new Button(300,50,"Create New World");
 				createButton.setBackground(new Color(181,143,76));
@@ -184,11 +181,7 @@ public class MUI extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (drawGrassBlock) {
-			g.setColor(World.GRASS);
-			g.fillRect(0, height-200, width, height);
-			System.out.println("hello");
-		}
+		
 	}
 	
 	private void endMenu(String worldGeneratorType, String worldSize) {

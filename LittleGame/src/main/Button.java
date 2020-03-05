@@ -60,6 +60,7 @@ public class Button extends JLabel implements MouseListener {
 	}
 	
 	public void buttonAction() {
+		new AudioManager().buttonPressed();
 		for (ActionListener actionListener: actionListeners) {
 			actionListener.actionPerformed(actionEvent);
 		}
