@@ -52,7 +52,7 @@ public class UIManager extends JFrame {
 		});
 		
 		pack();
-		setResizable(true);
+		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
