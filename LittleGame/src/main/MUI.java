@@ -165,7 +165,7 @@ public class MUI extends JPanel {
 				loadButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (!worldList.isSelectionEmpty()) {
-							World.setOverWrite(false);
+							World.setOverWrite(true);
 							World.setNewWorld(false);
 							World.setWorldName(worldList.getSelectedValue());
 							FileManager.worldLoad(worldList.getSelectedValue());
