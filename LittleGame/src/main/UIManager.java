@@ -25,6 +25,7 @@ public class UIManager extends JFrame {
 	private AudioManager audioManager = new AudioManager();
 	
 	public UIManager() {
+		FileManager.checkFileStructure();
 		audioManager.startBackgroundMusic();
 		setTitle("Little Game");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -59,7 +60,7 @@ public class UIManager extends JFrame {
 	
 	public void closeGame() {
 		if (gui != null) {
-			FileManager.worldSave();
+			FileManager.worldSave(World.getWorldName());
 		}
 		if (!closeWindow.isVisible()) {
 			closeWindow.setVisible(true);

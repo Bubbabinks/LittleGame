@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -14,8 +15,12 @@ import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 public class MUI extends JPanel {
@@ -30,6 +35,9 @@ public class MUI extends JPanel {
 	private Button multiButton;
 	private Button createButton;
 	private Button loadButton;
+	private JTextField worldTextArea;
+	
+	private JList<String> worldList;
 	
 	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
 	
@@ -65,51 +73,72 @@ public class MUI extends JPanel {
 		singleButton = new Button(300, 50, "Singleplayer");
 		singleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				remove(title);
-				remove(singleButton);
-				remove(multiButton);
+				removeAll();
 				repaint();
 				
-				JPanel worldPanel = new JPanel();
-				JScrollPane worldScollPane = new JScrollPane(worldPanel);
-				
 				GridBagConstraints GC = new GridBagConstraints();
+				worldList = new JList<String>(FileManager.getWorldsNames());
+				worldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				JScrollPane worldScrollPane = new JScrollPane(worldList);
+				worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-200));
+				GC.anchor = GridBagConstraints.CENTER;
+				GC.gridwidth = 3;
+				add(worldScrollPane,GC);
+				
+				GC = new GridBagConstraints();
 				GC.insets = new Insets(75, 20, 10, 20);
 				GC.gridy=1;
 				GC.gridx=1;
+				GC.gridwidth = 1;
 				repaint();
 				createButton = new Button(300,50,"Create New World");
 				createButton.setBackground(new Color(181,143,76));
 				createButton.setForeground(Color.WHITE);
 				createButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						remove(createButton);
-						remove(loadButton);
+						removeAll();
 						repaint();
+						
+						JLabel worldNameLabel = new JLabel("World Name: ");
+						worldNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						GridBagConstraints GC = new GridBagConstraints();
+						GC.insets = new Insets(0,0,5,0);
+						add(worldNameLabel, GC);
+						
+						worldTextArea = new JTextField("New World");
+						worldTextArea.setPreferredSize(new Dimension(100,20));
+						worldTextArea.setHorizontalAlignment(SwingConstants.CENTER);
+						GC = new GridBagConstraints();
+						GC.gridx = 1;
+						add(worldTextArea, GC);
+						
 						JLabel generationLabel = new JLabel("Generation Type: ");
 						generationLabel.setHorizontalAlignment(SwingConstants.CENTER);
-						GridBagConstraints GC = new GridBagConstraints();
+						GC = new GridBagConstraints();
+						GC.gridy = 1;
 						add(generationLabel, GC);
 						
 						GC = new GridBagConstraints();
+						GC.gridy = 1;
 						GC.gridx = 1;
 						add(generationComboBox, GC);
 						
 						JLabel worldSizeLabel = new JLabel("World Size: ");
 						worldSizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 						GC = new GridBagConstraints();
-						GC.gridy = 1;
+						GC.gridy = 2;
 						add(worldSizeLabel, GC);
 						
 						worldSizeComboBox.setSelectedIndex(1);
 						GC = new GridBagConstraints();
 						GC.gridx = 1;
-						GC.gridy = 1;
+						GC.gridy = 2;
 						add(worldSizeComboBox, GC);
 						
 						Button button = new Button(200, 30, "Generate World");
 						button.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent arg0) {
+								World.setWorldName(worldTextArea.getText());
 								if (generationComboBox.getSelectedItem().equals("INFINITE_G")) {
 									endMenu((String)generationComboBox.getSelectedItem(), (String)worldSizeComboBox.getSelectedItem(), 1);
 								}else {
@@ -117,7 +146,7 @@ public class MUI extends JPanel {
 								}
 							}
 						});
-						GC.gridy = 2;
+						GC.gridy = 3;
 						GC.gridx = 0;
 						GC.gridwidth = 2;
 						GC.insets = new Insets(10, 0, 0, 0);
@@ -135,9 +164,13 @@ public class MUI extends JPanel {
 				loadButton.setForeground(Color.WHITE);
 				loadButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						World.setNewWorld(false);
-						FileManager.worldLoad();
-						endMenu("normal_g", "small_w");
+						if (!worldList.isSelectionEmpty()) {
+							World.setOverWrite(false);
+							World.setNewWorld(false);
+							World.setWorldName(worldList.getSelectedValue());
+							FileManager.worldLoad(worldList.getSelectedValue());
+							endMenu("normal_g", "small_w");
+						}
 					}
 					
 				});

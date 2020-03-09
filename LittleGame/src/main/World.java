@@ -18,7 +18,17 @@ public class World {
 	public static Inventory inventory;
 	private static String worldName = "";
 	
+	private static boolean overWrite = false;
+	
 	private static int globalShiftX = 0, globalShiftY = 0;
+	
+	public static void setOverWrite(boolean overWrite) {
+		World.overWrite = overWrite;
+	}
+	
+	public static boolean getOverWrite() {
+		return World.overWrite;
+	}
 	
 	public static void setInventory(Inventory inventory) {
 		World.inventory = inventory;

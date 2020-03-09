@@ -14,33 +14,65 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FileManager {
 
+	public final static String GAME_FOLDER = System.getProperty("user.home")+"/Documents/LittleGame";
+	
 	private static ArrayList<GameObject> world = World.getWorld();
 	
-	public static void worldLoad() {
-		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
-		fileChooser.setDialogTitle("Select World File");
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("World File", "world");
-		fileChooser.addChoosableFileFilter(filter);
-		int val = fileChooser.showOpenDialog(null);
-		if (val != JFileChooser.APPROVE_OPTION) {
-			return;
+	public static void checkFileStructure() {
+		File gameFolder = new File(GAME_FOLDER);
+		File worldFolder = new File(GAME_FOLDER+"/saves");
+		if (!gameFolder.exists()) {
+			gameFolder.mkdir();
+			worldFolder.mkdir();
+		}else {
+			if (!worldFolder.exists()) {
+				worldFolder.mkdir();
+			}
 		}
-		readWorld(fileChooser.getSelectedFile().getPath());
 	}
 	
-	public static void worldSave() {
-		ArrayList<GameObject> world = World.getWorld();
-		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
-		fileChooser.setDialogTitle("Save");
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("World File .world", "world");
-		fileChooser.addChoosableFileFilter(filter);
-		int val = fileChooser.showSaveDialog(null);
-		if (val != JFileChooser.APPROVE_OPTION) {
-			return;
+	public static String[] getWorldsNames() {
+		String[] list = new File(GAME_FOLDER+"/saves").list();
+		for (int i=0;i<list.length;i++) {
+			list[i] = list[i].substring(0, list[i].lastIndexOf("."));
 		}
-		writeWorld(fileChooser.getSelectedFile().getPath());
+		return list;
+	}
+	
+	public static void worldLoad(String worldName) {
+		readWorld(GAME_FOLDER+"/saves/"+worldName+".world");
+	}
+	
+	public static void worldSave(String worldName) {
+		if (!World.getOverWrite()) {
+			boolean taken = false;
+			int interation = 0;
+			do {
+				taken = false;
+				String[] worlds = getWorldsNames();
+				for (String name: worlds) {
+					if (interation == 0) {
+						if (name.equals(worldName)) {
+							taken = true;
+						}
+					}else {
+						if (name.equals(worldName+interation)) {
+							taken = true;
+						}
+					}
+				}
+				if (taken) {
+					interation++;
+				}
+			}while (taken);
+			if (interation == 0) {
+				writeWorld(GAME_FOLDER+"/saves/"+worldName);
+			}else {
+				writeWorld(GAME_FOLDER+"/saves/"+worldName+interation);
+			}
+		}else {
+			writeWorld(GAME_FOLDER+"/saves/"+worldName);
+		}
 	}
 	
 	private static void readWorld(String path) {
