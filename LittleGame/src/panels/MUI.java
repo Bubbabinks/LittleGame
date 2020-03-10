@@ -107,7 +107,7 @@ public class MUI extends JPanel {
 				worldList.setForeground(Color.WHITE);
 				worldList.setBorder(BorderFactory.createLineBorder(new Color(121, 83, 16), 3));
 				worldScrollPane.setBorder(BorderFactory.createLineBorder(new Color(121, 83, 16), 3));
-				worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-250));
+				worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-300));
 				GC.anchor = GridBagConstraints.CENTER;
 				GC.gridy = 1;
 				GC.gridwidth = 2;
