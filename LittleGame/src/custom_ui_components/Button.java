@@ -1,4 +1,4 @@
-package main;
+package custom_ui_components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import main.AudioManager;
 
 public class Button extends JLabel implements MouseListener {
 

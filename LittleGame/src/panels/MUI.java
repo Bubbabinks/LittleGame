@@ -1,4 +1,4 @@
-package main;
+package panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,6 +23,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
+import custom_ui_components.Button;
+import main.FileManager;
+import world_utils.World;
+import world_utils.WorldGenerator;
+
 public class MUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -38,6 +43,7 @@ public class MUI extends JPanel {
 	private JTextField worldTextArea;
 	
 	private JList<String> worldList;
+	private JScrollPane worldScrollPane;
 	
 	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
 	
@@ -79,21 +85,19 @@ public class MUI extends JPanel {
 				GridBagConstraints GC = new GridBagConstraints();
 				worldList = new JList<String>(FileManager.getWorldsNames());
 				worldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				JScrollPane worldScrollPane = new JScrollPane(worldList);
+				worldScrollPane = new JScrollPane(worldList);
 				worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-200));
 				GC.anchor = GridBagConstraints.CENTER;
 				GC.gridwidth = 3;
 				add(worldScrollPane,GC);
 				
 				GC = new GridBagConstraints();
-				GC.insets = new Insets(75, 20, 10, 20);
+				GC.insets = new Insets(20, 20, 10, 20);
 				GC.gridy=1;
 				GC.gridx=1;
 				GC.gridwidth = 1;
 				repaint();
 				createButton = new Button(300,50,"Create New World");
-				createButton.setBackground(new Color(181,143,76));
-				createButton.setForeground(Color.WHITE);
 				createButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						removeAll();
@@ -158,10 +162,8 @@ public class MUI extends JPanel {
 				
 				GC = new GridBagConstraints();
 				GC.gridy = 1;
-				GC.insets = new Insets(75, 20, 10, 20);
+				GC.insets = new Insets(20, 20, 10, 20);
 				loadButton = new Button(300,50,"Load World");
-				loadButton.setBackground(new Color(181,143,76));
-				loadButton.setForeground(Color.WHITE);
 				loadButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (!worldList.isSelectionEmpty()) {
@@ -175,6 +177,56 @@ public class MUI extends JPanel {
 					
 				});
 				add(loadButton,GC);
+				
+				GC = new GridBagConstraints();
+				GC.gridy = 2;
+				GC.gridx = 1;
+				GC.insets = new Insets(20, 20, 10, 20);
+				Button deleteButton = new Button(300,50,"Delete");
+				deleteButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (!worldList.isSelectionEmpty()) {
+							FileManager.deleteWorld(worldList.getSelectedValue());
+							remove(worldScrollPane);
+							GridBagConstraints GC = new GridBagConstraints();
+							worldList = new JList<String>(FileManager.getWorldsNames());
+							worldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+							worldScrollPane = new JScrollPane(worldList);
+							worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-200));
+							GC.anchor = GridBagConstraints.CENTER;
+							GC.gridwidth = 3;
+							add(worldScrollPane,GC);
+							revalidate();
+						}
+					}
+				});
+				add(deleteButton, GC);
+				
+				GC = new GridBagConstraints();
+				GC.gridy = 2;
+				GC.gridx = 2;
+				GC.insets = new Insets(20, 20, 10, 20);
+				Button backButton = new Button(300,50,"Back");
+				backButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						removeAll();
+						GridBagConstraints GC = new GridBagConstraints();
+						GC.gridy = 1;
+						GC.insets = new Insets(10,0,10,0);
+						add(singleButton, GC);
+						
+						GC = new GridBagConstraints();
+						GC.gridy = 2;
+						GC.insets = new Insets(10,0,10,0);
+						add(multiButton, GC);
+						
+						GC = new GridBagConstraints();
+						add(title, GC);
+						repaint();
+						revalidate();
+					}
+				});
+				add(backButton, GC);
 				
 				revalidate();
 			}

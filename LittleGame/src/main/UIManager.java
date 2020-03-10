@@ -16,6 +16,12 @@ import javax.swing.JRootPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import game_object.Inventory;
+import panels.GUI;
+import panels.MUI;
+import world_utils.World;
+import world_utils.WorldGenerator;
+
 public class UIManager extends JFrame {
 
 	private static final long serialVersionUID = 1L;

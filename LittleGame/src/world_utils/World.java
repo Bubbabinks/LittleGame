@@ -1,7 +1,10 @@
-package main;
+package world_utils;
 
 import java.awt.Color;
 import java.util.ArrayList;
+
+import game_object.GameObject;
+import game_object.Inventory;
 
 public class World {
 	

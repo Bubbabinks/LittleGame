@@ -12,6 +12,12 @@ import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import game_object.Block;
+import game_object.GameObject;
+import game_object.Inventory;
+import world_utils.World;
+import world_utils.WorldGenerator;
+
 public class FileManager {
 
 	public final static String GAME_FOLDER = System.getProperty("user.home")+"/Documents/LittleGame";
@@ -29,6 +35,21 @@ public class FileManager {
 				worldFolder.mkdir();
 			}
 		}
+	}
+	
+	public static void deleteWorld(String worldName) {
+		File world = new File(GAME_FOLDER+"/saves/"+worldName+".world");
+		deleteDir(world);
+	}
+	
+	private static void deleteDir(File file) {
+	    File[] contents = file.listFiles();
+	    if (contents != null) {
+	        for (File f : contents) {
+	            deleteDir(f);
+	        }
+	    }
+	    file.delete();
 	}
 	
 	public static String[] getWorldsNames() {

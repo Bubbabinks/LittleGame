@@ -1,4 +1,4 @@
-package main;
+package world_utils;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -6,6 +6,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
+
+import game_object.Block;
+import game_object.GameObject;
+import game_object.Player;
 
 public class WorldGenerator {
 

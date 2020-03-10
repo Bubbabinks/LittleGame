@@ -1,4 +1,4 @@
-package main;
+package utils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +7,11 @@ import java.awt.event.KeyListener;
 import java.util.HashSet;
 
 import javax.swing.Timer;
+
+import game_object.GameObject;
+import game_object.Player;
+import main.AudioManager;
+import world_utils.World;
 
 public class PlayerController implements KeyListener {
 

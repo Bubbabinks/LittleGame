@@ -1,4 +1,4 @@
-package main;
+package panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,6 +14,16 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import game_object.Block;
+import game_object.GameObject;
+import game_object.Inventory;
+import game_object.Player;
+import main.AudioManager;
+import utils.KeyHandled;
+import utils.PlayerController;
+import world_utils.World;
+import world_utils.WorldGenerator;
 
 public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheelListener{
 	
