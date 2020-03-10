@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -82,19 +83,40 @@ public class MUI extends JPanel {
 				removeAll();
 				repaint();
 				
+				JLabel title = new JLabel("Worlds");
+				title.setPreferredSize(new Dimension(200,100));
+				title.setHorizontalAlignment(SwingConstants.CENTER);
 				GridBagConstraints GC = new GridBagConstraints();
+				GC.gridwidth = 2;
+				Font labelFont = title.getFont();
+				String labelText = title.getText();
+				int stringWidth = title.getFontMetrics(labelFont).stringWidth(labelText);
+				int componentWidth = 200;
+				double widthRatio = (double)componentWidth / (double)stringWidth;
+				int newFontSize = (int)(labelFont.getSize() * widthRatio)-5;
+				int componentHeight = 100;
+				int fontSizeToUse = Math.min(newFontSize, componentHeight);
+				title.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+				add(title, GC);
+				
+				GC = new GridBagConstraints();
 				worldList = new JList<String>(FileManager.getWorldsNames());
 				worldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				worldScrollPane = new JScrollPane(worldList);
-				worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-200));
+				worldList.setBackground(new Color(181,143,76));
+				worldList.setForeground(Color.WHITE);
+				worldList.setBorder(BorderFactory.createLineBorder(new Color(121, 83, 16), 3));
+				worldScrollPane.setBorder(BorderFactory.createLineBorder(new Color(121, 83, 16), 3));
+				worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-250));
 				GC.anchor = GridBagConstraints.CENTER;
-				GC.gridwidth = 3;
+				GC.gridy = 1;
+				GC.gridwidth = 2;
 				add(worldScrollPane,GC);
 				
 				GC = new GridBagConstraints();
 				GC.insets = new Insets(20, 20, 10, 20);
-				GC.gridy=1;
-				GC.gridx=1;
+				GC.gridy=2;
+				GC.gridx=0;
 				GC.gridwidth = 1;
 				repaint();
 				createButton = new Button(300,50,"Create New World");
@@ -161,7 +183,7 @@ public class MUI extends JPanel {
 				add(createButton,GC);
 				
 				GC = new GridBagConstraints();
-				GC.gridy = 1;
+				GC.gridy = 2;
 				GC.insets = new Insets(20, 20, 10, 20);
 				loadButton = new Button(300,50,"Load World");
 				loadButton.addActionListener(new ActionListener() {
@@ -179,8 +201,8 @@ public class MUI extends JPanel {
 				add(loadButton,GC);
 				
 				GC = new GridBagConstraints();
-				GC.gridy = 2;
-				GC.gridx = 1;
+				GC.gridy = 3;
+				GC.gridx = 0;
 				GC.insets = new Insets(20, 20, 10, 20);
 				Button deleteButton = new Button(300,50,"Delete");
 				deleteButton.addActionListener(new ActionListener() {
@@ -203,8 +225,8 @@ public class MUI extends JPanel {
 				add(deleteButton, GC);
 				
 				GC = new GridBagConstraints();
-				GC.gridy = 2;
-				GC.gridx = 2;
+				GC.gridy = 3;
+				GC.gridx = 1;
 				GC.insets = new Insets(20, 20, 10, 20);
 				Button backButton = new Button(300,50,"Back");
 				backButton.addActionListener(new ActionListener() {
