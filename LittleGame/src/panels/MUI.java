@@ -83,9 +83,9 @@ public class MUI extends JPanel {
 				removeAll();
 				repaint();
 				
-				JLabel title = new JLabel("Worlds");
-				title.setPreferredSize(new Dimension(200,100));
-				title.setHorizontalAlignment(SwingConstants.CENTER);
+				JLabel worldTitle = new JLabel("Worlds");
+				worldTitle.setPreferredSize(new Dimension(200,100));
+				worldTitle.setHorizontalAlignment(SwingConstants.CENTER);
 				GridBagConstraints GC = new GridBagConstraints();
 				GC.gridwidth = 2;
 				Font labelFont = title.getFont();
@@ -96,8 +96,8 @@ public class MUI extends JPanel {
 				int newFontSize = (int)(labelFont.getSize() * widthRatio)-5;
 				int componentHeight = 100;
 				int fontSizeToUse = Math.min(newFontSize, componentHeight);
-				title.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
-				add(title, GC);
+				worldTitle.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+				add(worldTitle, GC);
 				
 				GC = new GridBagConstraints();
 				worldList = new JList<String>(FileManager.getWorldsNames());
@@ -213,10 +213,15 @@ public class MUI extends JPanel {
 							GridBagConstraints GC = new GridBagConstraints();
 							worldList = new JList<String>(FileManager.getWorldsNames());
 							worldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+							worldList.setBackground(new Color(181,143,76));
+							worldList.setForeground(Color.WHITE);
+							worldList.setBorder(BorderFactory.createLineBorder(new Color(121, 83, 16), 3));
 							worldScrollPane = new JScrollPane(worldList);
-							worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-200));
+							worldScrollPane.setPreferredSize(new Dimension(width*2/3,height-300));
+							worldScrollPane.setBorder(BorderFactory.createLineBorder(new Color(121, 83, 16), 3));
 							GC.anchor = GridBagConstraints.CENTER;
-							GC.gridwidth = 3;
+							GC.gridwidth = 2;
+							GC.gridy = 1;
 							add(worldScrollPane,GC);
 							revalidate();
 						}

@@ -29,8 +29,8 @@ public class Player implements GameObject{
 			if (gameObject.getY() <= y+height && y<gameObject.getY()+gameObject.getHeight()) {
 				jump = -1;
 				return true;
+				}
 			}
-		}
 		if (check == 2 && jump == -1) {
 			jump = 0;
 		}
