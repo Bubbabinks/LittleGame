@@ -78,6 +78,15 @@ public class UIManager extends JFrame {
 		repaint();
 		
 		gui = new GUI(width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize), "0");
+		gui.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				removeAll();
+				repaint();
+				add(mui);
+				revalidate();
+			}
+			
+		});
 		add(gui,BorderLayout.CENTER);
 		
 		revalidate();

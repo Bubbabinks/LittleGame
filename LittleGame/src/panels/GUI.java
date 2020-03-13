@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import custom_ui_components.GraphicButton;
 import game_object.Block;
 import game_object.GameObject;
 import game_object.Inventory;
@@ -36,6 +37,7 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	private AudioManager audioManager = new AudioManager();
 	
 	private ArrayList<GameObject> world = World.getWorld();
+	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
 	
 	public GUI(int width, int height, int worldGeneratorType, int worldSize, String needsPlayer) {
 		this.width = width;
@@ -74,6 +76,21 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 			repaint();
 		}
 	});
+	
+	public void addActionListener(ActionListener actionListener) {
+		actionListeners.add(actionListener);
+	}
+	
+	private void triggerActionListener() {
+		stopAll();
+		for (ActionListener actionListener: actionListeners) {
+			actionListener.actionPerformed(new ActionEvent(this, 0, "close GUI"));
+		}
+	}
+	
+	private void stopAll() {
+		
+	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
