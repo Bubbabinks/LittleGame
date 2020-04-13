@@ -30,6 +30,10 @@ public class PlayerController implements KeyListener {
 		timer.start();
 	}
 	
+	public void stopAll() {
+		timer.stop();
+	}
+	
 	private Timer timer = new Timer(speed, new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (gravity) {

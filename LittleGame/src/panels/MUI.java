@@ -122,6 +122,9 @@ public class MUI extends JPanel {
 				createButton = new Button(300,50,"Create New World");
 				createButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						World.setOverWrite(false);
+						World.setNewWorld(true);
+						
 						removeAll();
 						repaint();
 						
@@ -289,6 +292,34 @@ public class MUI extends JPanel {
 		GC.insets = new Insets(10,0,10,0);
 		add(multiButton, GC);
 		
+	}
+	
+	public void loadMainScreen() {
+		removeAll();
+		JLabel title = new JLabel("Little Game");
+		title.setPreferredSize(new Dimension(500,200));
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints GC = new GridBagConstraints();
+		Font labelFont = title.getFont();
+		String labelText = title.getText();
+		int stringWidth = title.getFontMetrics(labelFont).stringWidth(labelText);
+		int componentWidth = 500;
+		double widthRatio = (double)componentWidth / (double)stringWidth;
+		int newFontSize = (int)(labelFont.getSize() * widthRatio)-5;
+		int componentHeight = 200;
+		int fontSizeToUse = Math.min(newFontSize, componentHeight);
+		title.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+		add(title, GC);
+		
+		GC = new GridBagConstraints();
+		GC.gridy = 1;
+		GC.insets = new Insets(10,0,10,0);
+		add(singleButton, GC);
+		
+		GC = new GridBagConstraints();
+		GC.gridy = 2;
+		GC.insets = new Insets(10,0,10,0);
+		add(multiButton, GC);
 	}
 	
 	public void paintComponent(Graphics g) {

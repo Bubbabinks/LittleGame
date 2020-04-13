@@ -29,6 +29,11 @@ public class World {
 		World.overWrite = overWrite;
 	}
 	
+	public static void resetWorld() {
+		world = new ArrayList<GameObject>();
+		worldName = "";
+	}
+	
 	public static boolean getOverWrite() {
 		return World.overWrite;
 	}

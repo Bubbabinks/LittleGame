@@ -9,6 +9,7 @@ import javax.swing.Timer;
 
 import game_object.Block;
 import game_object.GameObject;
+import game_object.Inventory;
 import game_object.Player;
 
 public class WorldGenerator {
@@ -125,6 +126,13 @@ public class WorldGenerator {
 			System.out.println("Forgot to add Player to World Generator: ERROR");
 			System.exit(0);
 		}
+		Inventory inventory = World.inventory;
+		int[] slotAmounts = inventory.getSlotAmounts();
+		for (int i=0;i<slotAmounts.length;i++) {
+			slotAmounts[i] = 0;
+		}
+		inventory.setSlotAmounts(slotAmounts);
+		World.setInventory(inventory);
 	}
 	
 	public void startGeneration(Player player) {

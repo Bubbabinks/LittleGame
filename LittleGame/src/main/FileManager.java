@@ -110,31 +110,20 @@ public class FileManager {
 			int[] slotAmounts = inventory.getSlotAmounts();
 			while (sc.hasNextLine()) {
 				String line = sc.nextLine();
-				if (line.contains("id:Block")) {
-					block = new Block(WorldGenerator.blockSize, WorldGenerator.blockSize);
+				String[] in = line.split(",");
+				int slot = Integer.parseInt(in[1])-1;
+				if (in[0].equals("1")) {
+					slots[slot] = new Color(Integer.parseInt(in[2]),Integer.parseInt(in[3]),Integer.parseInt(in[4]));
+					slotAmounts[slot] = Integer.parseInt(in[5]);
 				}
-				if (line.contains("color:")) {
-					String[] in = line.substring(line.indexOf(":")+1).split(",");
-					block.setColor(new Color(Integer.parseInt(in[0]), Integer.parseInt(in[1]), Integer.parseInt(in[2])));
-				}
-				if (line.contains("GlobalX:")) {
-					block.setX(Integer.parseInt(line.substring(line.indexOf(":")+1)));
-					block.setGlobalX(Integer.parseInt(line.substring(line.indexOf(":")+1)));
-				}
-				if (line.contains("GlobalY:")) {
-					block.setY(Integer.parseInt(line.substring(line.indexOf(":")+1)));
-					block.setGlobalY(Integer.parseInt(line.substring(line.indexOf(":")+1)));
-					world.add(block);
-				}
-				if (line.contains("slotid:")) {
-					inventory.setSelectedSlot(Integer.parseInt(line.substring(line.indexOf(":")+1)));
-				}
-				if (line.contains("slotC:")) {
-					String[] in = line.substring(line.indexOf(":")+1).split(",");
-					slots[inventory.getSelectedSlot()-1] = new Color(Integer.parseInt(in[0]), Integer.parseInt(in[1]), Integer.parseInt(in[2]));
-				}
-				if (line.contains("slotamount:")) {
-					slotAmounts[inventory.getSelectedSlot()-1] = Integer.parseInt(line.substring(line.indexOf(":")+1));
+				if (in[0].equals("0")) {
+					block = new Block(WorldGenerator.blockSize, WorldGenerator.blockSize, 
+							new Color(Integer.parseInt(in[1]),Integer.parseInt(in[2]),Integer.parseInt(in[3])));
+					block.setGlobalX(Integer.parseInt(in[4]));
+					block.setX(Integer.parseInt(in[4]));
+					block.setGlobalY(Integer.parseInt(in[5]));
+					block.setY(Integer.parseInt(in[5]));
+					World.getWorld().add(block);
 				}
 			}
 			inventory.setSelectedSlot(1);
@@ -162,20 +151,11 @@ public class FileManager {
 			Color[] slots = inventory.getSlots();
 			int[] slotAmounts = inventory.getSlotAmounts();
 			for (int i=0;i<slots.length;i++) {
-				writer.append("{\n"
-						+ "\tid:Inventory\n"
-						+ "\tslotid:"+(i+1)+"\n"
-						+ "\tslotC:"+slots[i].getRed()+","+slots[i].getGreen()+","+slots[i].getBlue()+"\n"
-						+ "\tslotamount:"+slotAmounts[i]+"\n"
-						+ "}\n");
+				writer.append("1,"+(i+1)+","+slots[i].getRed()+","+slots[i].getGreen()+","+slots[i].getBlue()+","+slotAmounts[i]+"\n");
 			}
 			for (GameObject object: world) {
-				writer.append("{\n"
-						+ "\tid:Block\n"
-						+ "\tcolor:"+object.getColor().getRed()+","+object.getColor().getGreen()+","+object.getColor().getBlue()+"\n"
-						+ "\tGlobalX:"+object.getGlobalX()+"\n"
-						+ "\tGlobalY:"+object.getGlobalY()+"\n"
-						+ "}\n");
+				writer.append("0," + object.getColor().getRed()+","+object.getColor().getGreen()+","+object.getColor().getBlue()+","+object.getGlobalX()+
+						","+object.getGlobalY()+"\n");
 			}
 			writer.close();
 		} catch (IOException e) {

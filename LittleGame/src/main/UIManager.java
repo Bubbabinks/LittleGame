@@ -68,9 +68,7 @@ public class UIManager extends JFrame {
 		if (gui != null) {
 			FileManager.worldSave(World.getWorldName());
 		}
-		if (!closeWindow.isVisible()) {
-			closeWindow.setVisible(true);
-		}
+		System.exit(0);
 	}
 	
 	private void startGame(String worldGeneratorType, String worldSize) {
@@ -80,9 +78,11 @@ public class UIManager extends JFrame {
 		gui = new GUI(width, height, WorldGenerator.worldGenerationTypeConverter(worldGeneratorType), WorldGenerator.worldSizeConverter(worldSize), "0");
 		gui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				removeAll();
+				remove(gui);
+				gui = null;
 				repaint();
-				add(mui);
+				mui.loadMainScreen();
+				add(mui, BorderLayout.CENTER);
 				revalidate();
 			}
 			
@@ -106,60 +106,6 @@ public class UIManager extends JFrame {
 		pack();
 		
 		gui.requestFocus();
-	}
-	
-	private CloseWindow closeWindow = new CloseWindow();
-	
-	public class CloseWindow extends JFrame {
-		
-		private static final long serialVersionUID = 1L;
-		
-		public CloseWindow() {
-			setTitle("Exiting?");
-			setResizable(false);
-			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					super.windowClosing(e);
-					setVisible(false);
-				}
-			});
-			setLayout(new GridBagLayout());
-			GridBagConstraints GC = new GridBagConstraints();
-			JLabel text = new JLabel("Are you sure you want to Exit?");
-			text.setHorizontalAlignment(SwingConstants.CENTER);
-			text.setPreferredSize(new Dimension(260,50));
-			GC.gridwidth = 2;
-			add(text, GC);
-			
-			GC = new GridBagConstraints();
-			JButton yes = new JButton("Yes");
-			yes.setPreferredSize(new Dimension(130,50));
-			yes.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					System.exit(0);
-				}
-			});
-			JRootPane rootPane = SwingUtilities.getRootPane(this); 
-			rootPane.setDefaultButton(yes);
-			GC.gridy = 1;
-			add(yes, GC);
-			
-			GC = new GridBagConstraints();
-			JButton no = new JButton("No");
-			no.setPreferredSize(new Dimension(130,50));
-			no.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					setVisible(false);
-				}
-			});
-			GC.gridy = 1;
-			GC.gridx = 1;
-			add(no, GC);
-			
-			pack();
-			setLocationRelativeTo(this);
-		}
 	}
 	
 	public static void main(String[] args) {

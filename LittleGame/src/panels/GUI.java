@@ -21,6 +21,7 @@ import game_object.GameObject;
 import game_object.Inventory;
 import game_object.Player;
 import main.AudioManager;
+import main.FileManager;
 import utils.KeyHandled;
 import utils.PlayerController;
 import world_utils.World;
@@ -82,6 +83,8 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	}
 	
 	private void triggerActionListener() {
+		FileManager.worldSave(World.getWorldName());
+		World.resetWorld();
 		stopAll();
 		for (ActionListener actionListener: actionListeners) {
 			actionListener.actionPerformed(new ActionEvent(this, 0, "close GUI"));
@@ -89,7 +92,8 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 	}
 	
 	private void stopAll() {
-		
+		mainTimer.stop();
+		playerController.stopAll();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -177,6 +181,9 @@ public class GUI extends JPanel implements KeyHandled, MouseListener, MouseWheel
 		}
 		if (keyCode >= 49 && keyCode <= 57) {
 			inventory.setSelectedSlot(keyCode-48);
+		}
+		if (keyCode == KeyEvent.VK_ESCAPE) {
+			triggerActionListener();
 		}
 	}
 
